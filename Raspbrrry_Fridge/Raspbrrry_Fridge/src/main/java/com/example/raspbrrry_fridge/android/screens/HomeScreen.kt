@@ -1,6 +1,5 @@
 package com.example.raspbrrry_fridge.android.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text

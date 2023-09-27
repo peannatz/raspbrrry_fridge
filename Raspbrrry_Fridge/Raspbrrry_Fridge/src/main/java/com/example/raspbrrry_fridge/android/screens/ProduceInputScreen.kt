@@ -27,11 +27,8 @@ import com.chargemap.compose.numberpicker.NumberPicker
 import com.example.raspbrrry_fridge.android.data.Product
 import com.example.raspbrrry_fridge.android.viewModel.BarcodeScannerViewModel
 import com.example.raspbrrry_fridge.android.viewModel.ProductViewModel
-import java.sql.Date
-import java.text.DateFormat
 import java.time.LocalDate
 import java.time.YearMonth
-import java.util.*
 
 @Composable
 fun ProduceInputScreen(
@@ -78,7 +75,7 @@ fun ProduceInputScreen(
                 NumberPicker(
                     value = year,
                     onValueChange = { year = it },
-                    range = year.rangeTo(year + 100)
+                    range = currentDate.year.rangeTo(currentDate.year + 100)
                 )
             }
             Button(onClick = {

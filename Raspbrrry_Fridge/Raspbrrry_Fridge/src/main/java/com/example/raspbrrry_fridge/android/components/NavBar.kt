@@ -1,6 +1,5 @@
 package com.example.raspbrrry_fridge.android.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
@@ -12,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.raspbrrry_fridge.android.R
-import com.example.raspbrrry_fridge.android.ui.theme.MyCoolTheme
 
 var selectedItem by mutableIntStateOf(0)
 
@@ -33,7 +31,7 @@ fun NavBar(navController: NavController) {
                 label = { Text(item, color = MaterialTheme.colorScheme.primary) },
                 selected = selectedItem == index,
                 onClick = {
-                    selectedItem = index;
+                    selectedItem = index
                     navController.navigate("${item}Screen")
                 }
             )
