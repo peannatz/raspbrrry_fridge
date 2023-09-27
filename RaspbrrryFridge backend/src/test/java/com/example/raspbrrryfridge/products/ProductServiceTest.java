@@ -21,7 +21,7 @@ class ProductServiceTest {
 
     @Test
     void addProduct() {
-        ProductDto productToAdd = new ProductDto("Test Product", 100, "2023-09-30");
+        ProductDto productToAdd = new ProductDto("Test Product", 100, "2023-09-30T00:00:00");
 
         productService.addProduct(productToAdd);
 
@@ -32,7 +32,7 @@ class ProductServiceTest {
     @Test
     void deleteProduct() {
         int productIdToDelete = 1;
-        ProductDto productToDelete = new ProductDto("Test Product", 100, "2023-09-30");
+        ProductDto productToDelete = new ProductDto("Test Product", 100, "2023-09-30T00:00:00");
 
         productService.addProduct(productToDelete);
         productService.deleteProduct(productIdToDelete);
@@ -44,7 +44,7 @@ class ProductServiceTest {
     @Test
     void findProductById() {
         int productIdToFind = 1;
-        ProductDto productToFind = new ProductDto("Test Product", 100, "2023-09-30");
+        ProductDto productToFind = new ProductDto("Test Product", 100, "2023-09-30T00:00:00");
 
         productService.addProduct(productToFind);
 
