@@ -2,6 +2,7 @@ package com.example.raspbrrryfridge.products;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,16 +14,15 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public void addProduct(Product product){
+    public void addProduct(ProductDto productDto){
+        Product product = new Product();
+        product.setName(productDto.name());
+        product.setWeight(productDto.weight());
         productRepository.save(product);
     }
 
     public void deleteProduct(int id){
         productRepository.deleteById(id);
-    }
-
-    public Optional<Product> findProductById(int id){
-        return productRepository.findById(id);
     }
 
     public void editProduct(int id, Product product){
@@ -32,4 +32,11 @@ public class ProductService {
         productRepository.save(oldProduct);
     }
 
+    public Optional<Product> findProductById(int id){
+        return productRepository.findById(id);
+    }
+
+    public List<Product> findAllProducts() {
+        return (List<Product>) productRepository.findAll();
+    }
 }

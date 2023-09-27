@@ -2,6 +2,8 @@ package com.example.raspbrrryfridge.products;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -12,6 +14,7 @@ public class Product {
 
     private String name;
     private int weight;
+    private Date mhd;
 
     public int getId() {
         return id;
@@ -35,5 +38,13 @@ public class Product {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public Date getMhd() {
+        return mhd;
+    }
+
+    public void setMhd(Date mhd) {
+        this.mhd = mhd;
     }
 }
