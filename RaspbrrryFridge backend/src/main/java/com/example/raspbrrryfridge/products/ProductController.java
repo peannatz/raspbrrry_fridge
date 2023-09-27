@@ -1,6 +1,9 @@
 package com.example.raspbrrryfridge.products;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,5 +35,15 @@ public class ProductController {
     @GetMapping("/find/{id}")
     public Optional<Product> findProductById(@PathVariable int id){
         return productService.findProductById(id);
+    }
+
+    @GetMapping("/findAll")
+    public List<Product> findAll(){
+        return productService.findAllProducts();
+    }
+
+    @GetMapping("/findByMhd/{mhd}")
+    public Optional<Product> findProductByMhd(@PathVariable String mhd){
+        return productService.findProductByMhd(LocalDate.parse(mhd));
     }
 }

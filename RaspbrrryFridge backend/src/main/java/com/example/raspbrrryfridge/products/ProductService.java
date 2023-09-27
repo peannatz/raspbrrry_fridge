@@ -42,4 +42,8 @@ public class ProductService {
     public List<Product> findAllProducts() {
         return (List<Product>) productRepository.findAll();
     }
+
+    public Optional<Product> findProductByMhd(LocalDate mhd){
+        return productRepository.findByMhd(mhd);
+    }
 }
