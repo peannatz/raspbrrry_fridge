@@ -2,6 +2,7 @@ package com.example.raspbrrryfridge.products;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class ProductService {
         Product product = new Product();
         product.setName(productDto.name());
         product.setWeight(productDto.weight());
-        product.setMhd(productDto.mhd());
+        product.setMhd(LocalDateTime.parse(productDto.mhd()));
         productRepository.save(product);
     }
 
