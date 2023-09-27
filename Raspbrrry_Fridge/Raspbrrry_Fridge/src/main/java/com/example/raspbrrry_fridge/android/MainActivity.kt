@@ -3,28 +3,27 @@ package com.example.raspbrrry_fridge.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.composable
-import com.example.raspbrrry_fridge.android.screens.HomeScreen
-import com.example.raspbrrry_fridge.android.screens.ProduceScreen
-import com.example.raspbrrry_fridge.android.screens.RecipesScreen
-import com.example.raspbrrry_fridge.android.screens.StatsScreen
-import com.example.raspbrrry_fridge.android.screens.ScanProduceScreen
+import com.example.raspbrrry_fridge.android.screens.*
+import com.example.raspbrrry_fridge.android.ui.theme.MyCoolTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme {
+            MyCoolTheme(useDarkTheme = isSystemInDarkTheme()) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 ) {
                     Navigation()
                 }
@@ -42,6 +41,8 @@ fun Navigation() {
         composable("RecipesScreen"){ RecipesScreen(navController)}
         composable("StatsScreen"){ StatsScreen(navController)}
         composable("ScanProduceScreen"){ ScanProduceScreen(navController)}
+        composable("ProduceInputScreen"){ ProduceInputScreen(navController)}
+
     }
 }
 
@@ -54,7 +55,7 @@ fun GreetingView(text: String) {
 @Preview
 @Composable
 fun DefaultPreview() {
-    MyApplicationTheme {
+    MyCoolTheme(useDarkTheme = isSystemInDarkTheme()) {
         GreetingView("Hello, Android!")
     }
 }

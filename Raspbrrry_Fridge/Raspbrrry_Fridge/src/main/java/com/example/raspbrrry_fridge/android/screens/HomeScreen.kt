@@ -1,5 +1,6 @@
 package com.example.raspbrrry_fridge.android.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
@@ -18,6 +19,7 @@ fun HomeScreen(
 ) {
     GeneralScaffold(navController)
     { Column(Modifier.fillMaxSize()){
+       // Image(painter = , contentDescription = )
             Text(text = "Welcome", modifier = Modifier.align(Alignment.CenterHorizontally))
             Text(
                 text = "You're all good, nothing wasted today.",

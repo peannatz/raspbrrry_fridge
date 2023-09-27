@@ -1,36 +1,32 @@
 package com.example.raspbrrry_fridge.android.viewModel
 
-import android.content.ContentValues
-import android.util.Log
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.raspbrrry_fridge.android.data.productResponse
+import androidx.navigation.NavController
+import com.example.raspbrrry_fridge.android.data.RawProduct
+import com.example.raspbrrry_fridge.android.data.ProductResponse
+import com.example.raspbrrry_fridge.android.network.BarcodeApiClient.getProductByEan
 import com.google.gson.Gson
-import com.journeyapps.barcodescanner.ScanIntentResult
-import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import makeApiRequest
 
 class BarcodeScannerViewModel : ViewModel() {
-    fun onBarcodeScanned(result: String) {
 
-        Log.i(ContentValues.TAG, "scanned code: $result")
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                val apiResponse = makeApiRequest(result)
-                println(apiResponse)
-                val gson = Gson()
+    lateinit var scannedRawProduct: RawProduct
 
-                try {
-                    val myData = gson.fromJson(apiResponse, productResponse::class.java)
-                    println(myData.product )
-                } catch (e: Exception) {
-                    // Handle any parsing errors here
-                }
-            }
+    private suspend fun fetchProduct(result: String): RawProduct = withContext(Dispatchers.IO) {
+        val apiResponse = getProductByEan(result)
+        val gson = Gson()
+
+        return@withContext try {
+            val myData = gson.fromJson(apiResponse, ProductResponse::class.java)
+            myData.product
+        } catch (e: Exception) {
+            e.printStackTrace()
+            RawProduct() // Return an empty Product for demonstration purposes
         }
+    }
+
+    suspend fun onBarcodeScanned(ean: String, navController: NavController) {
+        scannedRawProduct = fetchProduct(ean)
     }
 }
