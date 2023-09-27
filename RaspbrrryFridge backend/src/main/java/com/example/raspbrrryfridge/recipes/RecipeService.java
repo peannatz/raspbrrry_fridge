@@ -19,7 +19,12 @@ public class RecipeService {
         this.productService = productService;
     }
 
-    public void addRecipe(Recipe recipe){
+    public void addRecipe(RecipeDto recipeDto){
+        Recipe recipe = new Recipe();
+        recipe.setName(recipeDto.name());
+        recipe.setDescription(recipeDto.description());
+        recipe.setPortions(recipeDto.portions());
+        recipe.setProducts(recipeDto.products());
         recipeRepository.save(recipe);
     }
 
@@ -27,8 +32,14 @@ public class RecipeService {
         recipeRepository.deleteById(id);
     }
 
-    public void editRecipe(Recipe recipe){
-        Recipe oldRecipe = recipeRepository.findById(recipe.getId()).orElseThrow(()->new RuntimeException("Recipe not found"));
+    public void editRecipe(int id, RecipeDto recipeDto){
+        Recipe oldRecipe = recipeRepository.findById(id).orElseThrow(()->new RuntimeException("Recipe not found"));
+        oldRecipe.setId(id);
+        oldRecipe.setName(recipeDto.name());
+        oldRecipe.setDescription(recipeDto.description());
+        oldRecipe.setPortions(recipeDto.portions());
+        oldRecipe.setProducts(recipeDto.products());
+        recipeRepository.save(oldRecipe);
     }
     public Optional<Recipe> findRecipeById(int id){
         return recipeRepository.findById(id);

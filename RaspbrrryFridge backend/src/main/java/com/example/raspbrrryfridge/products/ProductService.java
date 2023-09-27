@@ -29,6 +29,7 @@ public class ProductService {
 
     public void editProduct(int id, Product product){
         Product oldProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        oldProduct.setId(id);
         oldProduct.setName(product.getName());
         oldProduct.setWeight(product.getWeight());
         oldProduct.setMhd(product.getMhd());
