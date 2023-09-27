@@ -2,7 +2,7 @@ package com.example.raspbrrryfridge.products;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
@@ -14,7 +14,7 @@ public class Product {
 
     private String name;
     private int weight;
-    private Date mhd;
+    private LocalDateTime mhd;
 
     public int getId() {
         return id;
@@ -40,11 +40,11 @@ public class Product {
         this.weight = weight;
     }
 
-    public Date getMhd() {
+    public LocalDateTime getMhd() {
         return mhd;
     }
 
-    public void setMhd(Date mhd) {
+    public void setMhd(LocalDateTime mhd) {
         this.mhd = mhd;
     }
 }
