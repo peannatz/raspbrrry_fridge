@@ -18,6 +18,7 @@ public class ProductService {
         Product product = new Product();
         product.setName(productDto.name());
         product.setWeight(productDto.weight());
+        product.setMhd(productDto.mhd());
         productRepository.save(product);
     }
 
@@ -29,6 +30,7 @@ public class ProductService {
         Product oldProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         oldProduct.setName(product.getName());
         oldProduct.setWeight(product.getWeight());
+        oldProduct.setMhd(product.getMhd());
         productRepository.save(oldProduct);
     }
 
