@@ -28,8 +28,8 @@ public class ProductController {
     }
 
     @PostMapping("/edit/{id}")
-    public void editProduct(@PathVariable int id, @RequestBody Product product){
-        productService.editProduct(id, product);
+    public void editProduct(@PathVariable int id, @RequestBody ProductDto productDto){
+        productService.editProduct(id, productDto);
     }
 
     @GetMapping("/find/{id}")
