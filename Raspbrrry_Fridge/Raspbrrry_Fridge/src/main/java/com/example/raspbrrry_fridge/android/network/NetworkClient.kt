@@ -9,7 +9,10 @@ import java.io.IOException
 
 abstract class NetworkClient {
 
-    val backendUrl="http://localhost:8080/"
+    val deviceEmulator = "http://10.0.2.2:8080"
+    val usbConnectedDevice = "http://localhost:8080"
+    val device = "http://192.168.2.171:8080"
+    val backendUrl = usbConnectedDevice
     val client = OkHttpClient()
 
     fun getRequest(url: String): String {
@@ -20,7 +23,7 @@ abstract class NetworkClient {
         return try {
             val response: Response = client.newCall(request).execute()
             if (response.isSuccessful || response.code == 404) {
-                response.body?.string() ?: ""
+                response.body!!.string() ?: ""
             } else {
                 // Handle error, e.g., response.code(), response.message()
                 throw IOException("HTTP Error: ${response.code}")

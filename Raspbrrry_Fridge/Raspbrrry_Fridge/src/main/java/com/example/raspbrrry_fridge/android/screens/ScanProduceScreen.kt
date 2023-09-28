@@ -3,12 +3,7 @@ package com.example.raspbrrry_fridge.android.screens
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +17,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.raspbrrry_fridge.android.R
+import com.example.raspbrrry_fridge.android.components.CustomButton
 import com.example.raspbrrry_fridge.android.components.GeneralScaffold
 import com.example.raspbrrry_fridge.android.components.PermissionRequestComponent
 import com.example.raspbrrry_fridge.android.viewModel.BarcodeScannerViewModel
@@ -36,6 +32,7 @@ fun ScanProduceScreen(
     val currentlyLoading = remember {
         mutableStateOf(false)
     }
+
     OverlayLoadingScreen(
         isLoading = currentlyLoading
     ) // Set this to true when waiting for the API call to complete
@@ -72,11 +69,11 @@ fun ScanProduceScreen(
                         // Handle the scanned result here
                         torchOn = false
                         setTorchOff()
+                        barcodeView.pause()
                         currentlyLoading.value = true
                         barcodeScannerViewModel.viewModelScope.launch {
                             barcodeScannerViewModel.onBarcodeScanned(result.text, navController)
                             currentlyLoading.value = false
-                            navController.navigate("ProduceInputScreen")
                         }
                     }
 
@@ -90,18 +87,17 @@ fun ScanProduceScreen(
         fun startScanning() {
             barcodeView.resume()
         }
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.primaryContainer),
+        ) {
+            AndroidView(
+                factory = { barcodeView },
+                modifier = Modifier.fillMaxSize(),
             ) {
-                AndroidView(
-                    factory = { barcodeView },
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    startScanning()
-                }
+                startScanning()
+            }
 //            } else {
 //                barcodeView.pause()
 //                Text(text = "No internet connection :(")
@@ -109,37 +105,32 @@ fun ScanProduceScreen(
             //TODO: add overlay when no internet connection available and store scanned info somewhere
             //TODO: Feedback on 404
 
-            Button(
-                onClick = { navController.navigateUp() },
-                content = { Icon(Icons.Default.Close, contentDescription = "") },
-                modifier = Modifier.align(Alignment.TopEnd),
-                shape = RoundedCornerShape(15.dp)
-            )
-            Button(
-                onClick = {
-                    torchOn = !torchOn
-                    if (torchOn) {
-                        barcodeView.setTorchOn()
-                    } else {
-                        barcodeView.setTorchOff()
-                    }
-                },
-                modifier = Modifier.align(Alignment.BottomEnd),
-                shape = RoundedCornerShape(15.dp),
-                content = {
-                    Icon(
-                        painter = painterResource(
-                            id =
-                            if (torchOn) {
-                                R.drawable.light_off
-                            } else {
-                                R.drawable.light_on
-                            }
-                        ), contentDescription = null
-                    )
+            val modifierClose = Modifier
+                .align(Alignment.BottomEnd)
+                .offset((-10).dp, (-120).dp)
+            val painterClose = painterResource(id=R.drawable.close)
+            val modifierTorch = Modifier
+                .align(Alignment.BottomEnd)
+                .offset((-10).dp, (-75).dp)
+            val onClickTorch = {
+                torchOn = !torchOn
+                if (torchOn) {
+                    barcodeView.setTorchOn()
+                } else {
+                    barcodeView.setTorchOff()
                 }
-
+            }
+            val painterTorch = painterResource(
+                id =
+                if (torchOn) {
+                    R.drawable.light_off
+                } else {
+                    R.drawable.light_on
+                }
             )
+            CustomButton(modifierClose, painterClose) { navController.navigateUp() }
+            CustomButton(modifierTorch, painterTorch, onClickTorch)
+            ProduceInputPopup(navController = navController, visible = barcodeScannerViewModel.showInputPopup)
         }
     }
 }

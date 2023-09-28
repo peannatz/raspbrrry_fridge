@@ -15,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -29,7 +28,7 @@ fun ProduceScreen(
     navController: NavController,
     pvm: ProductViewModel = viewModel()
 ) {
-    pvm.fetchProducts(LocalContext.current)
+    pvm.fetchProducts()
 
     GeneralScaffold(navController) {
         ProduceItems(pvm)

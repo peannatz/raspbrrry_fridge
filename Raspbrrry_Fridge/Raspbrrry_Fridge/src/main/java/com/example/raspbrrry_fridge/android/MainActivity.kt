@@ -1,5 +1,6 @@
 package com.example.raspbrrry_fridge.android
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +20,9 @@ import com.example.raspbrrry_fridge.android.ui.theme.MyCoolTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
         setContent {
             MyCoolTheme(useDarkTheme = isSystemInDarkTheme()) {
                 Surface(
@@ -35,13 +39,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+
     NavHost(navController = navController, startDestination = "HomeScreen") {
-        composable("HomeScreen"){ HomeScreen(navController) }
-        composable("ProduceScreen"){ ProduceScreen(navController)}
-        composable("RecipesScreen"){ RecipesScreen(navController)}
-        composable("StatsScreen"){ StatsScreen(navController)}
-        composable("ScanProduceScreen"){ ScanProduceScreen(navController)}
-        composable("ProduceInputScreen"){ ProduceInputScreen(navController)}
+        composable("HomeScreen") { HomeScreen(navController) }
+        composable("ProduceScreen") { ProduceScreen(navController) }
+        composable("RecipesScreen") { RecipesScreen(navController) }
+        composable("StatsScreen") { StatsScreen(navController) }
+        composable("ScanProduceScreen") { ScanProduceScreen(navController) }
 
     }
 }

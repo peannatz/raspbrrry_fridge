@@ -12,9 +12,10 @@ data class RawProduct(
 )
 
 data class Product(
+    val id: Int = -1,
     val name: String = "",
-    val weight: Any = "",
-    val mhd: Any = "",
+    val weight: String = "",
+    val mhd: String = "",
 )
 
 data class ProductResponse(

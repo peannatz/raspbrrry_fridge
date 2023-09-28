@@ -2,9 +2,15 @@ package com.example.raspbrrry_fridge.android.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 
 
 private val LightColors = lightColorScheme(
@@ -83,8 +89,31 @@ fun MyCoolTheme(
         DarkColors
     }
 
+    val typography = Typography(
+        titleMedium = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 0.2.em,
+            color = colors.primary
+        ),
+        labelMedium =TextStyle(
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W100,
+            fontFamily = FontFamily.Monospace,
+            letterSpacing = 0.1.em,
+            color = colors.secondary
+        ),
+        bodyMedium=TextStyle(
+            fontSize = 16.sp,
+            fontFamily = FontFamily.Monospace,
+            letterSpacing = 0.2.em,
+            color = colors.secondary
+        )
+    )
+
     MaterialTheme(
         colorScheme = colors,
         content = content,
+        typography = typography
     )
 }
