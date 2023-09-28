@@ -1,9 +1,8 @@
-package com.example.raspbrrryfridge.recipes;
+package com.example.raspbrrryfridge.domain.recipes;
 
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController

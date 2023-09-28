@@ -1,4 +1,4 @@
-package com.example.raspbrrryfridge.products;
+package com.example.raspbrrryfridge.domain.products;
 
 import org.springframework.data.repository.CrudRepository;
 

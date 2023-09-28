@@ -1,6 +1,6 @@
-package com.example.raspbrrryfridge.products;
+package com.example.raspbrrryfridge.domain.products;
 
-import com.example.raspbrrryfridge.conversion.ConverterService;
+import com.example.raspbrrryfridge.system.conversion.ConverterService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

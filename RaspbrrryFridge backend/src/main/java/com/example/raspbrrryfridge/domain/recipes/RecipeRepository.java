@@ -1,4 +1,4 @@
-package com.example.raspbrrryfridge.recipes;
+package com.example.raspbrrryfridge.domain.recipes;
 
 import org.springframework.data.repository.CrudRepository;
 

@@ -1,6 +1,6 @@
-package com.example.raspbrrryfridge.recipes;
+package com.example.raspbrrryfridge.domain.recipes;
 
-import com.example.raspbrrryfridge.products.ProductService;
+import com.example.raspbrrryfridge.domain.products.ProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
