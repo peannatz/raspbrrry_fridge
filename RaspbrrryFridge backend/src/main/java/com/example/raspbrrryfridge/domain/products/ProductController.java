@@ -30,13 +30,18 @@ public class ProductController {
     }
 
     @PostMapping("/delete/{id}")
-    public void deleteProduct(@PathVariable int id){
+    public ResponseEntity<String> deleteProduct(@PathVariable int id){
         productService.deleteProduct(id);
+        return ResponseEntity.ok("Successfully deleted the product");
     }
 
     @PostMapping("/edit/{id}")
-    public void editProduct(@PathVariable int id, @RequestBody ProductDto productDto){
+    public ResponseEntity<String> editProduct(@PathVariable int id, @RequestBody ProductDto productDto){
+        if(!productValidator.isValid(productDto)){
+            return ResponseEntity.badRequest().body("The Product you sent is missing Information");
+        }
         productService.editProduct(id, productDto);
+        return ResponseEntity.ok("Successfully edited the Product");
     }
 
     @GetMapping("/find/{id}")
