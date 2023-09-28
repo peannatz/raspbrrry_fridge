@@ -1,6 +1,6 @@
-package com.example.raspbrrryfridge.recipes;
+package com.example.raspbrrryfridge.domain.recipes;
 
-import com.example.raspbrrryfridge.conversion.ConverterService;
+import com.example.raspbrrryfridge.system.conversion.ConverterService;
 import org.springframework.stereotype.Service;
 
 @Service

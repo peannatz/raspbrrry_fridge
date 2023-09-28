@@ -1,5 +1,7 @@
-package com.example.raspbrrryfridge.products;
+package com.example.raspbrrryfridge.domain.products;
 
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -18,8 +20,9 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public void addProduct(@RequestBody ProductDto productDto){
+    public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDto productDto){
         productService.addProduct(productDto);
+        return ResponseEntity.ok("Successfully added the Product to your Fridge");
     }
 
     @PostMapping("/delete/{id}")
@@ -45,5 +48,10 @@ public class ProductController {
     @GetMapping("/findByMhd/{mhd}")
     public Optional<Product> findProductByMhd(@PathVariable String mhd){
         return productService.findProductByMhd(LocalDate.parse(mhd));
+    }
+
+    @GetMapping("/findByEan/{ean}")
+    public List<Product> findProductbyEan(@PathVariable Long ean){
+        return productService.findProductByEan(ean);
     }
 }

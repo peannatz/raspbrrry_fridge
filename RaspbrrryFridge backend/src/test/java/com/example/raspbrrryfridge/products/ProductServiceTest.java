@@ -1,5 +1,6 @@
 package com.example.raspbrrryfridge.products;
 
+import com.example.raspbrrryfridge.domain.products.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

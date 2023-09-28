@@ -1,4 +1,4 @@
-package com.example.raspbrrryfridge.products;
+package com.example.raspbrrryfridge.domain.products;
 
 import org.springframework.stereotype.Service;
 
@@ -43,5 +43,9 @@ public class ProductService {
 
     public Optional<Product> findProductByMhd(LocalDate mhd){
         return productRepository.findByMhd(mhd);
+    }
+
+    public List<Product> findProductByEan(Long ean){
+        return productRepository.findByEan(ean);
     }
 }

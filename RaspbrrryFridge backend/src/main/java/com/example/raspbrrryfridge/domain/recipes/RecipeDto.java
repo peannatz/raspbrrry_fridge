@@ -1,7 +1,7 @@
-package com.example.raspbrrryfridge.recipes;
+package com.example.raspbrrryfridge.domain.recipes;
 
 
-import com.example.raspbrrryfridge.products.Product;
+import com.example.raspbrrryfridge.domain.products.Product;
 
 import java.util.List;
 

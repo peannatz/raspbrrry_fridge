@@ -1,6 +1,7 @@
-package com.example.raspbrrryfridge.products;
+package com.example.raspbrrryfridge.domain.products;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 
@@ -12,11 +13,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @NotBlank
     private String name;
+    @NotBlank
     private int weight;
     private LocalDate mhd;
+    @NotBlank
     private String url;
-    @Column(unique=true)
+    @NotBlank
     private Long ean;
 
     public int getId() {
