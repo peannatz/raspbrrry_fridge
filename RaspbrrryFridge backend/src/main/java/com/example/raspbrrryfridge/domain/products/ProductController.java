@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @GetMapping("/findByEan/{ean}")
-    public Optional<Product> findProductbyEan(@PathVariable Long ean){
+    public List<Product> findProductbyEan(@PathVariable Long ean){
         return productService.findProductByEan(ean);
     }
 }

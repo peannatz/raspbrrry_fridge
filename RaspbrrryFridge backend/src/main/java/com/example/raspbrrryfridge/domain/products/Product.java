@@ -20,7 +20,6 @@ public class Product {
     private LocalDate mhd;
     @NotBlank
     private String url;
-    @Column(unique=true)
     @NotBlank
     private Long ean;
 

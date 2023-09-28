@@ -45,7 +45,7 @@ public class ProductService {
         return productRepository.findByMhd(mhd);
     }
 
-    public Optional<Product> findProductByEan(Long ean){
+    public List<Product> findProductByEan(Long ean){
         return productRepository.findByEan(ean);
     }
 }
