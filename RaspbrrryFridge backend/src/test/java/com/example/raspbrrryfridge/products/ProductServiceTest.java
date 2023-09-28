@@ -12,11 +12,14 @@ class ProductServiceTest {
 
     ProductService productService;
     ProductRepository productRepository;
+    ProductConverterService productConverterService;
 
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
-        productService = new ProductService(productRepository);
+        productConverterService = new ProductConverterService();
+        productService = new ProductService(productRepository, productConverterService);
+
     }
 
     //TODO
