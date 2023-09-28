@@ -16,6 +16,7 @@ public class Product {
     private int weight;
     private LocalDate mhd;
     private String url;
+    @Column(unique=true)
     private Long ean;
 
     public int getId() {
