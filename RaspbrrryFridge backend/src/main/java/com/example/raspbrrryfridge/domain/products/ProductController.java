@@ -1,6 +1,5 @@
 package com.example.raspbrrryfridge.domain.products;
 
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,13 +13,18 @@ import java.util.Optional;
 public class ProductController {
 
     ProductService productService;
+    ProductValidator productValidator;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, ProductValidator productValidator) {
         this.productService = productService;
+        this.productValidator = productValidator;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDto productDto){
+    public ResponseEntity<String> addProduct(@RequestBody ProductDto productDto){
+        if(!productValidator.isValid(productDto)){
+            return ResponseEntity.badRequest().body("This Product is missing Information");
+        }
         productService.addProduct(productDto);
         return ResponseEntity.ok("Successfully added the Product to your Fridge");
     }
