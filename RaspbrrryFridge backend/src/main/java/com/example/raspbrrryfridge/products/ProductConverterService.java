@@ -1,0 +1,19 @@
+package com.example.raspbrrryfridge.products;
+
+import com.example.raspbrrryfridge.conversion.ConverterService;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+
+@Service
+public class ProductConverterService implements ConverterService<ProductDto, Product> {
+    @Override
+    public Product convertToEntity(ProductDto productDto, Product product) {
+        product.setName(productDto.name());
+        product.setWeight(productDto.weight());
+        product.setMhd(LocalDate.parse(productDto.mhd()));
+        product.setUrl(productDto.url());
+        product.setEan(productDto.ean());
+        return product;
+    }
+}
