@@ -30,13 +30,18 @@ public class RecipeController {
     }
 
     @PostMapping("/delete/{id}")
-    public void deleteRecipe(@PathVariable int id){
+    public ResponseEntity<String> deleteRecipe(@PathVariable int id){
         recipeService.deleteRecipe(id);
+        return ResponseEntity.ok("Successfully deleted the Recipe");
     }
 
     @PostMapping("/edit/{id}")
-    public void editRecipe(@PathVariable int id, @RequestBody RecipeDto recipeDto){
+    public ResponseEntity<String> editRecipe(@PathVariable int id, @RequestBody RecipeDto recipeDto){
+        if(!recipeValidator.isValid(recipeDto)){
+            return ResponseEntity.badRequest().body("The recipe you sent was missing information");
+        }
         recipeService.editRecipe(id, recipeDto);
+        return ResponseEntity.ok("Successfully edited the Recipe");
     }
 
     @GetMapping("/findById/{id}")
