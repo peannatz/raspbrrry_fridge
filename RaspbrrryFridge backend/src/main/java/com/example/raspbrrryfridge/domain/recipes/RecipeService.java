@@ -20,10 +20,7 @@ public class RecipeService {
 
     public void addRecipe(RecipeDto recipeDto){
         Recipe recipe = new Recipe();
-        recipe.setName(recipeDto.name());
-        recipe.setDescription(recipeDto.description());
-        recipe.setPortions(recipeDto.portions());
-        recipe.setProducts(recipeDto.products());
+        recipeConverterService.convertToEntity(recipeDto, recipe);
         recipeRepository.save(recipe);
     }
 

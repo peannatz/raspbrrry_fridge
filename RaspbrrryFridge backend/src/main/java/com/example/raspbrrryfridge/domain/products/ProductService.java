@@ -19,7 +19,8 @@ public class ProductService {
 
     public void addProduct(ProductDto productDto){
         Product product = new Product();
-        productRepository.save(productConverterService.convertToEntity(productDto, product));
+        productConverterService.convertToEntity(productDto, product);
+        productRepository.save(product);
     }
 
     public void deleteProduct(int id){
