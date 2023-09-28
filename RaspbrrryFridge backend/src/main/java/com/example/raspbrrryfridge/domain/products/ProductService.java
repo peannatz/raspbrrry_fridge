@@ -44,4 +44,8 @@ public class ProductService {
     public Optional<Product> findProductByMhd(LocalDate mhd){
         return productRepository.findByMhd(mhd);
     }
+
+    public Optional<Product> findProductByEan(Long ean){
+        return productRepository.findByEan(ean);
+    }
 }

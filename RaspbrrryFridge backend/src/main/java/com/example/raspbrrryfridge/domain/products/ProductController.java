@@ -49,4 +49,9 @@ public class ProductController {
     public Optional<Product> findProductByMhd(@PathVariable String mhd){
         return productService.findProductByMhd(LocalDate.parse(mhd));
     }
+
+    @GetMapping("/findByEan/{ean}")
+    public Optional<Product> findProductbyEan(@PathVariable Long ean){
+        return productService.findProductByEan(ean);
+    }
 }
