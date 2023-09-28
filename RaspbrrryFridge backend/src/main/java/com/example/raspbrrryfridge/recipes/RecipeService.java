@@ -1,11 +1,8 @@
 package com.example.raspbrrryfridge.recipes;
 
-import com.example.raspbrrryfridge.products.Product;
 import com.example.raspbrrryfridge.products.ProductService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,13 +10,20 @@ public class RecipeService {
 
     RecipeRepository recipeRepository;
     ProductService productService;
+    RecipeConverterService recipeConverterService;
 
-    public RecipeService(RecipeRepository recipeRepository, ProductService productService) {
+    public RecipeService(RecipeRepository recipeRepository, ProductService productService, RecipeConverterService recipeConverterService) {
         this.recipeRepository = recipeRepository;
         this.productService = productService;
+        this.recipeConverterService = recipeConverterService;
     }
 
-    public void addRecipe(Recipe recipe){
+    public void addRecipe(RecipeDto recipeDto){
+        Recipe recipe = new Recipe();
+        recipe.setName(recipeDto.name());
+        recipe.setDescription(recipeDto.description());
+        recipe.setPortions(recipeDto.portions());
+        recipe.setProducts(recipeDto.products());
         recipeRepository.save(recipe);
     }
 
@@ -27,8 +31,11 @@ public class RecipeService {
         recipeRepository.deleteById(id);
     }
 
-    public void editRecipe(Recipe recipe){
-        Recipe oldRecipe = recipeRepository.findById(recipe.getId()).orElseThrow(()->new RuntimeException("Recipe not found"));
+    public void editRecipe(int id, RecipeDto recipeDto){
+        Recipe oldRecipe = recipeRepository.findById(id).orElseThrow(()->new RuntimeException("Recipe not found"));
+        oldRecipe.setId(id);
+        oldRecipe = recipeConverterService.convertToEntity(recipeDto, oldRecipe);
+        recipeRepository.save(oldRecipe);
     }
     public Optional<Recipe> findRecipeById(int id){
         return recipeRepository.findById(id);

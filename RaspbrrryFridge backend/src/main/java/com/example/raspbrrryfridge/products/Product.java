@@ -15,6 +15,9 @@ public class Product {
     private String name;
     private int weight;
     private LocalDate mhd;
+    private String url;
+    @Column(unique=true)
+    private Long ean;
 
     public int getId() {
         return id;
@@ -46,5 +49,21 @@ public class Product {
 
     public void setMhd(LocalDate mhd) {
         this.mhd = mhd;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Long getEan() {
+        return ean;
+    }
+
+    public void setEan(Long ean) {
+        this.ean = ean;
     }
 }

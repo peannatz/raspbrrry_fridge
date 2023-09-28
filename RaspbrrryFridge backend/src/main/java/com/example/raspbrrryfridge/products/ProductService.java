@@ -10,28 +10,26 @@ import java.util.Optional;
 public class ProductService {
 
     ProductRepository productRepository;
+    ProductConverterService productConverterService;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductConverterService productConverterService) {
         this.productRepository = productRepository;
+        this.productConverterService = productConverterService;
     }
 
     public void addProduct(ProductDto productDto){
         Product product = new Product();
-        product.setName(productDto.name());
-        product.setWeight(productDto.weight());
-        product.setMhd(LocalDate.parse(productDto.mhd()));
-        productRepository.save(product);
+        productRepository.save(productConverterService.convertToEntity(productDto, product));
     }
 
     public void deleteProduct(int id){
         productRepository.deleteById(id);
     }
 
-    public void editProduct(int id, Product product){
+    public void editProduct(int id, ProductDto productDto){
         Product oldProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
-        oldProduct.setName(product.getName());
-        oldProduct.setWeight(product.getWeight());
-        oldProduct.setMhd(product.getMhd());
+        oldProduct.setId(id);
+        productConverterService.convertToEntity(productDto, oldProduct);
         productRepository.save(oldProduct);
     }
 

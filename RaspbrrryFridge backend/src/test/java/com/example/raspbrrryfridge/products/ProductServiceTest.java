@@ -12,16 +12,20 @@ class ProductServiceTest {
 
     ProductService productService;
     ProductRepository productRepository;
+    ProductConverterService productConverterService;
 
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
-        productService = new ProductService(productRepository);
+        productConverterService = new ProductConverterService();
+        productService = new ProductService(productRepository, productConverterService);
+
     }
 
+    //TODO
     @Test
     void addProduct() {
-        ProductDto productToAdd = new ProductDto("Test Product", 100, "2023-09-30");
+        ProductDto productToAdd = new ProductDto("Test Product", 100, "2023-09-30", "Edgar", 12345L);
 
         productService.addProduct(productToAdd);
 
@@ -32,7 +36,7 @@ class ProductServiceTest {
     @Test
     void deleteProduct() {
         int productIdToDelete = 1;
-        ProductDto productToDelete = new ProductDto("Test Product", 100, "2023-09-30");
+        ProductDto productToDelete = new ProductDto("Test Product", 100, "2023-09-30", "Edgar", 12345L);
 
         productService.addProduct(productToDelete);
         productService.deleteProduct(productIdToDelete);
@@ -44,7 +48,7 @@ class ProductServiceTest {
     @Test
     void findProductById() {
         int productIdToFind = 1;
-        ProductDto productToFind = new ProductDto("Test Product", 100, "2023-09-30");
+        ProductDto productToFind = new ProductDto("Test Product", 100, "2023-09-30","Edgar", 12345L);
 
         productService.addProduct(productToFind);
 

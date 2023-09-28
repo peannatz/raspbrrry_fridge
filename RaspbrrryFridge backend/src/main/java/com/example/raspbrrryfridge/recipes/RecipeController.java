@@ -1,9 +1,7 @@
 package com.example.raspbrrryfridge.recipes;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,19 +17,25 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    public void addRecipe(){
+
+    @PostMapping("/add")
+    public void addRecipe(@RequestBody RecipeDto recipeDto){
+        recipeService.addRecipe(recipeDto);
 
     }
 
-    public void deleteRecipe(){
-
+    @PostMapping("/delete/{id}")
+    public void deleteRecipe(@PathVariable int id){
+        recipeService.deleteRecipe(id);
     }
 
-    public void editRecipe(){
-
+    @PostMapping("/edit/{id}")
+    public void editRecipe(@PathVariable int id, @RequestBody RecipeDto recipeDto){
+        recipeService.editRecipe(id, recipeDto);
     }
 
-    public Optional<Recipe> findRecipeById(int id){
+    @GetMapping("/findById/{id}")
+    public Optional<Recipe> findRecipeById(@PathVariable int id){
         return recipeService.findRecipeById(id);
     }
 
