@@ -20,6 +20,8 @@ public class ProductService {
         product.setName(productDto.name());
         product.setWeight(productDto.weight());
         product.setMhd(LocalDate.parse(productDto.mhd()));
+        product.setUrl(productDto.url());
+        product.setEan(productDto.ean());
         productRepository.save(product);
     }
 
@@ -33,6 +35,8 @@ public class ProductService {
         oldProduct.setName(product.getName());
         oldProduct.setWeight(product.getWeight());
         oldProduct.setMhd(product.getMhd());
+        oldProduct.setUrl(product.getUrl());
+        oldProduct.setEan(product.getEan());
         productRepository.save(oldProduct);
     }
 
