@@ -1,11 +1,8 @@
 package com.example.raspbrrryfridge.recipes;
 
-import com.example.raspbrrryfridge.products.Product;
 import com.example.raspbrrryfridge.products.ProductService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,10 +10,12 @@ public class RecipeService {
 
     RecipeRepository recipeRepository;
     ProductService productService;
+    RecipeConverterService recipeConverterService;
 
-    public RecipeService(RecipeRepository recipeRepository, ProductService productService) {
+    public RecipeService(RecipeRepository recipeRepository, ProductService productService, RecipeConverterService recipeConverterService) {
         this.recipeRepository = recipeRepository;
         this.productService = productService;
+        this.recipeConverterService = recipeConverterService;
     }
 
     public void addRecipe(RecipeDto recipeDto){
@@ -35,10 +34,7 @@ public class RecipeService {
     public void editRecipe(int id, RecipeDto recipeDto){
         Recipe oldRecipe = recipeRepository.findById(id).orElseThrow(()->new RuntimeException("Recipe not found"));
         oldRecipe.setId(id);
-        oldRecipe.setName(recipeDto.name());
-        oldRecipe.setDescription(recipeDto.description());
-        oldRecipe.setPortions(recipeDto.portions());
-        oldRecipe.setProducts(recipeDto.products());
+        oldRecipe = recipeConverterService.convertToEntity(recipeDto, oldRecipe);
         recipeRepository.save(oldRecipe);
     }
     public Optional<Recipe> findRecipeById(int id){
