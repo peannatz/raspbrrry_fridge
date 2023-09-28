@@ -1,6 +1,7 @@
 package com.example.raspbrrryfridge.domain.recipes;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -11,15 +12,20 @@ import java.util.Optional;
 public class RecipeController {
 
     RecipeService recipeService;
+    RecipeValidator recipeValidator;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, RecipeValidator recipeValidator) {
         this.recipeService = recipeService;
+        this.recipeValidator = recipeValidator;
     }
 
-
     @PostMapping("/add")
-    public void addRecipe(@RequestBody RecipeDto recipeDto){
+    public ResponseEntity<String> addRecipe(@RequestBody RecipeDto recipeDto){
+        if(!recipeValidator.isValid(recipeDto)){
+            return ResponseEntity.badRequest().body("This recipe is missing Information");
+        }
         recipeService.addRecipe(recipeDto);
+        return ResponseEntity.ok("Successfully added Recipe");
 
     }
 
