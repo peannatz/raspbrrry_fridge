@@ -10,7 +10,7 @@ public class ProductValidator implements ValidatorService<ProductDto> {
         if(productDto == null){
             return false;
         }
-        if(productDto.name() == null || productDto.name().isEmpty()){
+        if(productDto.name() == null || productDto.name().isEmpty() || !productDto.name().matches("^[a-zA-Z]*$")){
             return false;
         }
         if(productDto.weight() <= 0){

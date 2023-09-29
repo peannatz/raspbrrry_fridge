@@ -49,4 +49,8 @@ public class ProductService {
     public List<Product> findProductByEan(Long ean){
         return productRepository.findByEan(ean);
     }
+
+    public List<Product> findProductByTag(String tag){
+        return productRepository.findByTag(tag);
+    }
 }

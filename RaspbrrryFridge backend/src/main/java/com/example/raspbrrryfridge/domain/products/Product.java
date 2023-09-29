@@ -23,6 +23,8 @@ public class Product {
     @NotBlank
     private Long ean;
 
+    private String tag;
+
     public int getId() {
         return id;
     }
@@ -69,5 +71,13 @@ public class Product {
 
     public void setEan(Long ean) {
         this.ean = ean;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

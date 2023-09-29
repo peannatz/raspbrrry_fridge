@@ -14,6 +14,7 @@ public class ProductConverterService implements ConverterService<ProductDto, Pro
         product.setMhd(LocalDate.parse(productDto.mhd()));
         product.setUrl(productDto.url());
         product.setEan(productDto.ean());
+        product.setTag(productDto.tag());
         return product;
     }
 }

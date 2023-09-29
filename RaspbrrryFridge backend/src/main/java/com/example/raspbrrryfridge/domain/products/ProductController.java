@@ -63,4 +63,9 @@ public class ProductController {
     public List<Product> findProductbyEan(@PathVariable Long ean){
         return productService.findProductByEan(ean);
     }
+
+    @GetMapping("/findByTag/{tag}")
+    public List<Product> findProductByTag(@PathVariable String tag){
+        return productService.findProductByTag(tag);
+    }
 }
