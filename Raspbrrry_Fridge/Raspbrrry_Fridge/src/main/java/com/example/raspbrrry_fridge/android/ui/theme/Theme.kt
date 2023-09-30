@@ -103,6 +103,13 @@ fun MyCoolTheme(
             letterSpacing = 0.1.em,
             color = colors.secondary
         ),
+        labelSmall =TextStyle(
+            fontSize = 12.sp,
+            fontWeight = FontWeight.W100,
+            fontFamily = FontFamily.Monospace,
+            letterSpacing = 0.1.em,
+            color = colors.onSecondary
+        ),
         bodyMedium=TextStyle(
             fontSize = 16.sp,
             fontFamily = FontFamily.Monospace,

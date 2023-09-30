@@ -1,6 +1,6 @@
 package com.example.raspbrrry_fridge.android.viewModel
 
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -11,15 +11,23 @@ import com.example.raspbrrry_fridge.android.network.BarcodeApiClient.getProductB
 import com.example.raspbrrry_fridge.android.network.ProductClient
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class BarcodeScannerViewModel : ViewModel() {
 
+    val eanProductsList = MutableStateFlow(listOf<Product>())
+    val eanProducts: StateFlow<List<Product>> get() = eanProductsList
+
     lateinit var scannedRawProduct: RawProduct
+    var selectedIndex = mutableIntStateOf(-1)
+    var selectedProduct = MutableStateFlow(Product())
+
     var showInputPopup = mutableStateOf(false)
 
-    private suspend fun fetchProduct(result: String): RawProduct = withContext(Dispatchers.IO) {
+    private suspend fun fetchProductData(result: String): RawProduct = withContext(Dispatchers.IO) {
         val apiResponse = getProductByEan(result)
         val gson = Gson()
 
@@ -32,6 +40,26 @@ class BarcodeScannerViewModel : ViewModel() {
         }
     }
 
+    fun getProductForId() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val fetchedProduct = ProductClient.getById(selectedIndex.intValue)
+                selectedProduct.emit(fetchedProduct)
+            }
+
+        }
+    }
+
+    private suspend fun getAllProductsWithEan() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val fetchedProducts = ProductClient.getByEan(scannedRawProduct._id)
+                eanProductsList.emit(fetchedProducts)
+            }
+        }
+    }
+
+
     fun addProduct(product: Product) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -41,8 +69,52 @@ class BarcodeScannerViewModel : ViewModel() {
         showInputPopup.value = false
     }
 
-    suspend fun onBarcodeScanned(ean: String, navController: NavController) {
-        scannedRawProduct = fetchProduct(ean)
+    fun updateProduct(ean: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                onBarcodeScanned(ean)
+            }
+        }
+    }
+
+    suspend fun onBarcodeScanned(ean: String) {
+        scannedRawProduct = fetchProductData(ean)
+        getAllProductsWithEan()
         showInputPopup.value = true
+        selectedIndex.intValue = -1
+        selectedProduct.value = Product()
+    }
+
+    fun editProduct(weightDiff: Int) {
+        val newWeight = selectedProduct.value.weight - weightDiff
+        val newProduct = Product(
+            selectedProduct.value.id,
+            selectedProduct.value.name,
+            newWeight,
+            selectedProduct.value.mhd,
+            selectedProduct.value.ean,
+            selectedProduct.value.ean
+        )
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                ProductClient.editProduct(selectedProduct.value.id, newProduct)
+            }
+        }
+    }
+
+    fun removeProduct() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                ProductClient.deleteProduct(selectedProduct.value.id)
+            }
+        }
+    }
+
+    fun removeAllProductsWithEan(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                eanProducts.value.forEach {ProductClient.deleteProduct(it.id) }
+            }
+        }
     }
 }

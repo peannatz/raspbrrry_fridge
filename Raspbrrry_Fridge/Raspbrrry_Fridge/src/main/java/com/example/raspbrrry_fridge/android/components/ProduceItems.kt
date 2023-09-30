@@ -10,24 +10,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.raspbrrry_fridge.android.data.Product
 import com.example.raspbrrry_fridge.android.viewModel.ProductViewModel
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.TextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 
 @Composable
 fun ProduceItems(pvm: ProductViewModel) {
 
     val products: List<Product> by pvm.products.collectAsState()
     val typography = MaterialTheme.typography
-    var searchInput by remember { mutableStateOf("") }
 
     Column(Modifier.padding(bottom = 80.dp)) {
-
-        TextField(value = searchInput,
-            onValueChange = { searchInput = it }, Modifier.fillMaxWidth(), label = { Text(text = "Search")}, singleLine = true)
-
         Row(Modifier.background(MaterialTheme.colorScheme.onPrimary)) {
             Spacer(Modifier.width(125.dp))
             Box(
@@ -56,11 +53,14 @@ fun ProduceItems(pvm: ProductViewModel) {
                         .clickable { pvm.selectProduct(item) },
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-//                    AsyncImage(
-//                        model = ImageRequest.Builder(LocalContext.current)
-//                            //.data(item.image_front_url)
-//                            .build(), contentDescription = "${item.name} Image", Modifier.height(100.dp)
-//                    )
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(item.url)
+                            .build(), contentDescription = "${item.name} Image",
+                        Modifier
+                            .height(100.dp)
+                            .width(100.dp)
+                    )
 
                     Box(
                         Modifier
@@ -70,7 +70,7 @@ fun ProduceItems(pvm: ProductViewModel) {
                     ) {
                         Text(text = item.name, Modifier.align(Alignment.TopStart), style = typography.titleMedium)
                         Text(
-                            text = item.weight,
+                            text = "${item.weight}g",
                             Modifier.align(Alignment.CenterStart),
                             style = typography.bodyMedium
                         )

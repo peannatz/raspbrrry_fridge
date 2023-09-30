@@ -19,7 +19,15 @@ object ProductClient : NetworkClient() {
         return gson.fromJson(response, productListType)
     }
 
-    fun getById(id: Int): List<Product> {
+    fun getByEan(ean: String): List<Product> {
+        val response = getRequest("$productEndpoint/findByEan/$ean")
+        if (response == "") {
+            return listOf()
+        }
+        return gson.fromJson(response, productListType)
+    }
+
+    fun getById(id: Int): Product {
         val response = getRequest("$productEndpoint/find/$id")
         return gson.fromJson(response, productType)
     }
@@ -29,9 +37,9 @@ object ProductClient : NetworkClient() {
         postRequest("$productEndpoint/add", json)
     }
 
-    fun editProducts(id: Int, product: Product) {
+    fun editProduct(id: Int, product: Product) {
         val json = gson.toJson(product, productType)
-        postRequest("$productEndpoint/edit/", json)
+        postRequest("$productEndpoint/edit/$id", json)
     }
 
     fun deleteProduct(id: Int) {

@@ -9,13 +9,16 @@ data class RawProduct(
     val nova_group: String = "",
     val nutriscore_grade: String = "",
     val nutriments: Any = "",
+    val _id: String = "",
 )
 
 data class Product(
     val id: Int = -1,
     val name: String = "",
-    val weight: String = "",
+    val weight: Int = 0,
     val mhd: String = "",
+    val ean: String = "",
+    val url: String = "",
 )
 
 data class ProductResponse(

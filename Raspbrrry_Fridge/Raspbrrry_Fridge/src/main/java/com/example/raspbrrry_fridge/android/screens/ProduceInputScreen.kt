@@ -3,6 +3,9 @@ package com.example.raspbrrry_fridge.android.screens
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
@@ -12,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -20,14 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.example.raspbrrry_fridge.android.R
 import com.example.raspbrrry_fridge.android.components.CustomButton
 import com.example.raspbrrry_fridge.android.data.Product
-import com.example.raspbrrry_fridge.android.ui.theme.MyCoolTheme
 import com.example.raspbrrry_fridge.android.viewModel.BarcodeScannerViewModel
-import com.example.raspbrrry_fridge.android.viewModel.ProductViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -49,41 +49,62 @@ fun ProduceInputPopup(
         var day by remember { mutableIntStateOf(currentDate.dayOfMonth) }
         var fillSwitch by remember { mutableStateOf(true) }
         val product = barcodeScannerViewModel.scannedRawProduct
+        val eanProducts = barcodeScannerViewModel.eanProducts.collectAsState()
+
+        fun addItemToFridge() {
+            val productInput = Product(
+                name = product.product_name,
+                weight = weight,
+                mhd = LocalDate.of(year, month, day).toString(),
+                ean = product._id,
+                url = product.image_front_url
+            )
+            barcodeScannerViewModel.addProduct(productInput)
+            navController.navigateUp()
+        }
+
+        fun editItem() {
+            if (barcodeScannerViewModel.selectedProduct.value.weight == weight) {
+                barcodeScannerViewModel.removeProduct()
+                barcodeScannerViewModel.updateProduct(product._id)
+            } else if (barcodeScannerViewModel.selectedProduct.value.weight > weight) {
+                barcodeScannerViewModel.editProduct(weight)
+                barcodeScannerViewModel.updateProduct(product._id)
+                return
+            } else {
+                //TODO
+            }
+            navController.navigateUp()
+        }
+
+        fun removeItem() {
+            barcodeScannerViewModel.removeAllProductsWithEan()
+        }
 
         Box(
             Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.inversePrimary)
+                .background(MaterialTheme.colorScheme.primaryContainer)
         ) {
-            Box(
-                Modifier
-                    .fillMaxWidth(0.8f)
-                    .fillMaxHeight(0.6f)
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .alpha(1f)
+            Column(
+                modifier = Modifier
                     .align(Alignment.Center)
+                    .padding(10.dp)
+                    .fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                CustomButton(
-                    Modifier
-                        .align(Alignment.TopEnd)
-                        .offset((-5).dp), painterResource(id = R.drawable.close)
-                ) {
-                    barcodeScannerViewModel.showInputPopup.value = false
-                    navController.navigateUp()
-                }
-                Column(
-                    modifier = Modifier.align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(text = product.brands, style = typography.bodyMedium)
-                    Text(text = product.product_name_de, style = typography.titleMedium)
-                    Spacer(Modifier.height(20.dp))
-                    TextField(
-                        value = weight.toString(),
-                        onValueChange = { weight = it.toInt() },
-                        label = { Text("Weight in g") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                    )
+                Text(text = product.brands, style = typography.bodyMedium)
+                Text(text = product.product_name_de, style = typography.titleMedium)
+                Spacer(Modifier.height(20.dp))
+                TextField(
+                    value = weight.toString(),
+                    onValueChange = { weight = it.toInt() },
+                    label = { Text("Weight in g") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
+                if (fillSwitch) {
                     Spacer(Modifier.height(30.dp))
                     Text(text = "Best Before", style = typography.bodyMedium)
                     Row {
@@ -106,33 +127,104 @@ fun ProduceInputPopup(
                             dividersColor = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
-                    Spacer(Modifier.height(30.dp))
-                    Row {
-                        Button(
-                            onClick = {
-                                val productInput = Product(
-                                    name = product.product_name,
-                                    weight = weight.toString(),
-                                    mhd = LocalDate.of(year, month, day).toString()
-                                )
-                                barcodeScannerViewModel.addProduct(productInput)
-                                navController.navigateUp()
+                }
+                Spacer(Modifier.height(30.dp))
+                Row {
+
+                    Button(
+                        onClick = {
+                            if (fillSwitch) {
+                                barcodeScannerViewModel.selectedIndex.intValue = -1
+                                addItemToFridge()
+                            } else {
+                                editItem()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colorScheme.primary),
+                        enabled = fillSwitch || barcodeScannerViewModel.selectedIndex.intValue > -1
+                    ) {
+                        Text(
+                            if (fillSwitch) {
+                                "Add"
+                            } else {
+                                "Remove"
                             },
+                            color = MaterialTheme.colorScheme.primaryContainer
+                        )
+                    }
+
+                    if (!fillSwitch) {
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Button(
                             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colorScheme.primary),
+                            enabled = barcodeScannerViewModel.selectedIndex.intValue > -1,
+                            onClick = { removeItem() }
                         ) {
                             Text(
-                                if (fillSwitch) {
-                                    "Add"
-                                } else {
-                                    "Remove"
-                                },
-                                color = MaterialTheme.colorScheme.primaryContainer
+                                "Remove All", color = MaterialTheme.colorScheme.primaryContainer
                             )
                         }
-                        Spacer(modifier = Modifier.width(20.dp))
-                        Switch(checked = fillSwitch, onCheckedChange = { fillSwitch = it })
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+                    if (eanProducts.value.isNotEmpty()) {
+                        Switch(checked = fillSwitch, onCheckedChange = {
+                            fillSwitch = it
+                            if (fillSwitch) barcodeScannerViewModel.selectedIndex.intValue > -1
+                        })
                     }
                 }
+                if (eanProducts.value.isNotEmpty()) {
+                    Spacer(Modifier.height(30.dp))
+                    Text("Already in your Fridge:", style = typography.bodyMedium)
+                    LazyColumn(
+                        Modifier.fillMaxHeight(0.2f)
+                    ) {
+                        items(eanProducts.value) { item ->
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                verticalAlignment = Alignment.Top,
+                                modifier =
+                                if (!fillSwitch) {
+                                    Modifier.fillMaxWidth()
+                                        .selectable(
+                                            selected = item.id == barcodeScannerViewModel.selectedIndex.intValue,
+                                            onClick = {
+                                                if (barcodeScannerViewModel.selectedIndex.intValue != item.id) {
+                                                    barcodeScannerViewModel.selectedIndex.intValue =
+                                                        item.id
+                                                    barcodeScannerViewModel.getProductForId()
+                                                } else {
+                                                    barcodeScannerViewModel.selectedIndex.intValue = -1
+                                                }
+                                            })
+                                        .background(if (barcodeScannerViewModel.selectedIndex.intValue == item.id) MaterialTheme.colorScheme.primary else Color.Transparent)
+                                } else {
+                                    Modifier.fillMaxWidth()
+                                }
+                            ) {
+                                Text(
+                                    text = "${item.weight}g",
+                                    style = if (barcodeScannerViewModel.selectedIndex.intValue == item.id) typography.labelSmall else typography.labelMedium,
+                                )
+                                Text(
+                                    text = item.mhd,
+                                    style = if (barcodeScannerViewModel.selectedIndex.intValue == item.id) typography.labelSmall else typography.labelMedium,
+                                )
+                            }
+                        }
+                    }
+                }
+                if (!fillSwitch && barcodeScannerViewModel.selectedIndex.intValue == -1) {
+                    Text("Please select a batch to remove")
+                }
+            }
+            CustomButton(
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .offset((-10).dp, (-75).dp), painterResource(id = R.drawable.close)
+            ) {
+                barcodeScannerViewModel.showInputPopup.value = false
+                navController.navigateUp()
             }
         }
     }

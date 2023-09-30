@@ -72,7 +72,7 @@ fun ScanProduceScreen(
                         barcodeView.pause()
                         currentlyLoading.value = true
                         barcodeScannerViewModel.viewModelScope.launch {
-                            barcodeScannerViewModel.onBarcodeScanned(result.text, navController)
+                            barcodeScannerViewModel.onBarcodeScanned(result.text)
                             currentlyLoading.value = false
                         }
                     }
