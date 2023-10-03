@@ -4,6 +4,7 @@ package com.example.raspbrrryfridge.domain.recipes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -47,6 +48,11 @@ public class RecipeController {
     @GetMapping("/findById/{id}")
     public Optional<Recipe> findRecipeById(@PathVariable int id){
         return recipeService.findRecipeById(id);
+    }
+
+    @GetMapping("/findAll")
+    public List<Recipe> findAllRecipes(){
+        return recipeService.findAllRecipes();
     }
 
 }

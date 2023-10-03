@@ -3,6 +3,7 @@ package com.example.raspbrrryfridge.domain.recipes;
 import com.example.raspbrrryfridge.domain.products.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,5 +37,9 @@ public class RecipeService {
     }
     public Optional<Recipe> findRecipeById(int id){
         return recipeRepository.findById(id);
+    }
+
+    public List<Recipe> findAllRecipes() {
+        return (List<Recipe>) recipeRepository.findAll();
     }
 }
