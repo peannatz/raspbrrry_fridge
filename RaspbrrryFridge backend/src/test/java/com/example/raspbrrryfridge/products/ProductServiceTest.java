@@ -30,8 +30,8 @@ class ProductServiceTest {
 
         productService.addProduct(productToAdd);
 
-        assertEquals("Test Product", productToAdd.name());
-        assertEquals(100, productToAdd.weight());
+        assertEquals("Test Product", productToAdd.getName());
+        assertEquals(100, productToAdd.getWeight());
     }
 
     @Test
@@ -54,8 +54,8 @@ class ProductServiceTest {
         productService.addProduct(productToFind);
 
         Optional<Product> findProduct = productService.findProductById(productIdToFind);
-        assertEquals(100, productToFind.weight());
-        assertEquals("Test Product", productToFind.name());
+        assertEquals(100, productToFind.getWeight());
+        assertEquals("Test Product", productToFind.getName());
     }
 
 

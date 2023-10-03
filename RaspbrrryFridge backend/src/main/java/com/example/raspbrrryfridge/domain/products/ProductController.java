@@ -1,5 +1,6 @@
 package com.example.raspbrrryfridge.domain.products;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,20 +14,14 @@ import java.util.Optional;
 public class ProductController {
 
     ProductService productService;
-    ProductValidator productValidator;
 
-    public ProductController(ProductService productService, ProductValidator productValidator) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.productValidator = productValidator;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addProduct(@RequestBody ProductDto productDto){
-        if(!productValidator.isValid(productDto)){
-            return ResponseEntity.badRequest().body("This Product is missing Information");
-        }
-        productService.addProduct(productDto);
-        return ResponseEntity.ok("Successfully added the Product to your Fridge");
+    public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductDto productDto){
+        return productService.addProduct(productDto);
     }
 
     @PostMapping("/delete/{id}")
@@ -37,9 +32,6 @@ public class ProductController {
 
     @PostMapping("/edit/{id}")
     public ResponseEntity<String> editProduct(@PathVariable int id, @RequestBody ProductDto productDto){
-        if(!productValidator.isValid(productDto)){
-            return ResponseEntity.badRequest().body("The Product you sent is missing Information");
-        }
         productService.editProduct(id, productDto);
         return ResponseEntity.ok("Successfully edited the Product");
     }
@@ -60,7 +52,7 @@ public class ProductController {
     }
 
     @GetMapping("/findByEan/{ean}")
-    public List<Product> findProductbyEan(@PathVariable Long ean){
+    public List<Product> findProductByEan(@PathVariable Long ean){
         return productService.findProductByEan(ean);
     }
 

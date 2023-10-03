@@ -1,5 +1,7 @@
 package com.example.raspbrrryfridge.domain.products;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,10 +19,17 @@ public class ProductService {
         this.productConverterService = productConverterService;
     }
 
-    public void addProduct(ProductDto productDto){
-        Product product = new Product();
-        productConverterService.convertToEntity(productDto, product);
-        productRepository.save(product);
+    public ResponseEntity<Product> addProduct(ProductDto productDto){
+        try{
+            Product product = new Product();
+            productConverterService.convertToEntity(productDto, product);
+            productRepository.save(product);
+            return new ResponseEntity<>(product, HttpStatus.CREATED);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     public void deleteProduct(int id){

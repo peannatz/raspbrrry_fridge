@@ -13,14 +13,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @NotBlank
     private String name;
-    @NotBlank
+
     private int weight;
     private LocalDate mhd;
-    @NotBlank
     private String url;
-    @NotBlank
     private Long ean;
 
     private String tag;
