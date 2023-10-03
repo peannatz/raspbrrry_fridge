@@ -10,4 +10,5 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 
     Optional<Product> findByMhd(LocalDate mhd);
     List<Product> findByEan(Long ean);
+    List<Product> findByTag(String tag);
 }

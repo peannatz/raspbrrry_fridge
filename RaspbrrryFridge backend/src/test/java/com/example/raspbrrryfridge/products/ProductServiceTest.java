@@ -26,18 +26,18 @@ class ProductServiceTest {
     //TODO
     @Test
     void addProduct() {
-        ProductDto productToAdd = new ProductDto("Test Product", 100, "2023-09-30", "Edgar", 12345L);
+        ProductDto productToAdd = new ProductDto("Test Product", 100, "2023-09-30", "Edgar", 12345L, "Pog");
 
         productService.addProduct(productToAdd);
 
-        assertEquals("Test Product", productToAdd.name());
-        assertEquals(100, productToAdd.weight());
+        assertEquals("Test Product", productToAdd.getName());
+        assertEquals(100, productToAdd.getWeight());
     }
 
     @Test
     void deleteProduct() {
         int productIdToDelete = 1;
-        ProductDto productToDelete = new ProductDto("Test Product", 100, "2023-09-30", "Edgar", 12345L);
+        ProductDto productToDelete = new ProductDto("Test Product", 100, "2023-09-30", "Edgar", 12345L, "Pog");
 
         productService.addProduct(productToDelete);
         productService.deleteProduct(productIdToDelete);
@@ -49,13 +49,13 @@ class ProductServiceTest {
     @Test
     void findProductById() {
         int productIdToFind = 1;
-        ProductDto productToFind = new ProductDto("Test Product", 100, "2023-09-30","Edgar", 12345L);
+        ProductDto productToFind = new ProductDto("Test Product", 100, "2023-09-30","Edgar", 12345L, "Pog");
 
         productService.addProduct(productToFind);
 
         Optional<Product> findProduct = productService.findProductById(productIdToFind);
-        assertEquals(100, productToFind.weight());
-        assertEquals("Test Product", productToFind.name());
+        assertEquals(100, productToFind.getWeight());
+        assertEquals("Test Product", productToFind.getName());
     }
 
 

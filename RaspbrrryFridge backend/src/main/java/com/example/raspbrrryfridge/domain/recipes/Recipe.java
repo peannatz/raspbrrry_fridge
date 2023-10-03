@@ -21,6 +21,8 @@ public class Recipe {
 
     private int portions;
 
+    private String url;
+
     @ManyToMany
     @JoinTable(
             name = "recipe_product",
@@ -67,5 +69,13 @@ public class Recipe {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

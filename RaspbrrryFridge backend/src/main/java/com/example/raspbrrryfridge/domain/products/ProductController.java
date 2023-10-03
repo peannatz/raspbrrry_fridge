@@ -20,19 +20,20 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDto productDto){
-        productService.addProduct(productDto);
-        return ResponseEntity.ok("Successfully added the Product to your Fridge");
+    public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductDto productDto){
+        return productService.addProduct(productDto);
     }
 
     @PostMapping("/delete/{id}")
-    public void deleteProduct(@PathVariable int id){
+    public ResponseEntity<String> deleteProduct(@PathVariable int id){
         productService.deleteProduct(id);
+        return ResponseEntity.ok("Successfully deleted the product");
     }
 
     @PostMapping("/edit/{id}")
-    public void editProduct(@PathVariable int id, @RequestBody ProductDto productDto){
+    public ResponseEntity<String> editProduct(@PathVariable int id, @RequestBody ProductDto productDto){
         productService.editProduct(id, productDto);
+        return ResponseEntity.ok("Successfully edited the Product");
     }
 
     @GetMapping("/find/{id}")
@@ -51,7 +52,12 @@ public class ProductController {
     }
 
     @GetMapping("/findByEan/{ean}")
-    public List<Product> findProductbyEan(@PathVariable Long ean){
+    public List<Product> findProductByEan(@PathVariable Long ean){
         return productService.findProductByEan(ean);
+    }
+
+    @GetMapping("/findByTag/{tag}")
+    public List<Product> findProductByTag(@PathVariable String tag){
+        return productService.findProductByTag(tag);
     }
 }

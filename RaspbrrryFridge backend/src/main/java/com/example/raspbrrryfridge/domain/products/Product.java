@@ -13,15 +13,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @NotBlank
     private String name;
-    @NotBlank
+
     private int weight;
     private LocalDate mhd;
-    @NotBlank
     private String url;
-    @NotBlank
     private Long ean;
+    private String tag;
+    private String categories_tag;
 
     public int getId() {
         return id;
@@ -69,5 +68,21 @@ public class Product {
 
     public void setEan(Long ean) {
         this.ean = ean;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getCategories_tag() {
+        return categories_tag;
+    }
+
+    public void setCategories_tag(String categories_tag) {
+        this.categories_tag = categories_tag;
     }
 }

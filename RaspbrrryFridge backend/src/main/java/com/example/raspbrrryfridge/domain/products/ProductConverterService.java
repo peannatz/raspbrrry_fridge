@@ -9,11 +9,13 @@ import java.time.LocalDate;
 public class ProductConverterService implements ConverterService<ProductDto, Product> {
     @Override
     public Product convertToEntity(ProductDto productDto, Product product) {
-        product.setName(productDto.name());
-        product.setWeight(productDto.weight());
-        product.setMhd(LocalDate.parse(productDto.mhd()));
-        product.setUrl(productDto.url());
-        product.setEan(productDto.ean());
+        product.setName(productDto.getName());
+        product.setWeight(productDto.getWeight());
+        product.setMhd(LocalDate.parse(productDto.getMhd()));
+        product.setUrl(productDto.getUrl());
+        product.setEan(productDto.getEan());
+        product.setTag(productDto.getTag());
+        product.setCategories_tag(productDto.getCategories_tag());
         return product;
     }
 }

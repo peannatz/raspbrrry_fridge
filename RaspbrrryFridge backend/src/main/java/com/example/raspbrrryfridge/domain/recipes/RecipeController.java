@@ -1,8 +1,10 @@
 package com.example.raspbrrryfridge.domain.recipes;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -11,31 +13,46 @@ import java.util.Optional;
 public class RecipeController {
 
     RecipeService recipeService;
+    RecipeValidator recipeValidator;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, RecipeValidator recipeValidator) {
         this.recipeService = recipeService;
+        this.recipeValidator = recipeValidator;
     }
 
-
     @PostMapping("/add")
-    public void addRecipe(@RequestBody RecipeDto recipeDto){
+    public ResponseEntity<String> addRecipe(@RequestBody RecipeDto recipeDto){
+        if(!recipeValidator.isValid(recipeDto)){
+            return ResponseEntity.badRequest().body("This recipe is missing Information");
+        }
         recipeService.addRecipe(recipeDto);
+        return ResponseEntity.ok("Successfully added Recipe");
 
     }
 
     @PostMapping("/delete/{id}")
-    public void deleteRecipe(@PathVariable int id){
+    public ResponseEntity<String> deleteRecipe(@PathVariable int id){
         recipeService.deleteRecipe(id);
+        return ResponseEntity.ok("Successfully deleted the Recipe");
     }
 
     @PostMapping("/edit/{id}")
-    public void editRecipe(@PathVariable int id, @RequestBody RecipeDto recipeDto){
+    public ResponseEntity<String> editRecipe(@PathVariable int id, @RequestBody RecipeDto recipeDto){
+        if(!recipeValidator.isValid(recipeDto)){
+            return ResponseEntity.badRequest().body("The recipe you sent was missing information");
+        }
         recipeService.editRecipe(id, recipeDto);
+        return ResponseEntity.ok("Successfully edited the Recipe");
     }
 
     @GetMapping("/findById/{id}")
     public Optional<Recipe> findRecipeById(@PathVariable int id){
         return recipeService.findRecipeById(id);
+    }
+
+    @GetMapping("/findAll")
+    public List<Recipe> findAllRecipes(){
+        return recipeService.findAllRecipes();
     }
 
 }

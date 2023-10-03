@@ -3,6 +3,7 @@ package com.example.raspbrrryfridge.domain.recipes;
 import com.example.raspbrrryfridge.domain.products.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,10 +21,7 @@ public class RecipeService {
 
     public void addRecipe(RecipeDto recipeDto){
         Recipe recipe = new Recipe();
-        recipe.setName(recipeDto.name());
-        recipe.setDescription(recipeDto.description());
-        recipe.setPortions(recipeDto.portions());
-        recipe.setProducts(recipeDto.products());
+        recipeConverterService.convertToEntity(recipeDto, recipe);
         recipeRepository.save(recipe);
     }
 
@@ -39,5 +37,9 @@ public class RecipeService {
     }
     public Optional<Recipe> findRecipeById(int id){
         return recipeRepository.findById(id);
+    }
+
+    public List<Recipe> findAllRecipes() {
+        return (List<Recipe>) recipeRepository.findAll();
     }
 }
