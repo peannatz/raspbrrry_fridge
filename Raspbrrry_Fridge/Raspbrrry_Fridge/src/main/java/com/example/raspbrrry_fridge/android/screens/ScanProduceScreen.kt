@@ -24,6 +24,7 @@ import com.example.raspbrrry_fridge.android.viewModel.BarcodeScannerViewModel
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.*
 import kotlinx.coroutines.launch
+import android.Manifest
 
 @Composable
 fun ScanProduceScreen(
@@ -35,10 +36,8 @@ fun ScanProduceScreen(
 
     OverlayLoadingScreen(
         isLoading = currentlyLoading
-    ) // Set this to true when waiting for the API call to complete
+    )
     {
-        // Your existing content goes here
-        // This is where you can place your main UI
         val barcodeScannerViewModel: BarcodeScannerViewModel = viewModel(LocalContext.current as ComponentActivity)
 
         GeneralScaffold(navController = navController) {
@@ -47,7 +46,7 @@ fun ScanProduceScreen(
         var isPermissionGranted by remember { mutableStateOf(false) }
 
         if (!isPermissionGranted) {
-            PermissionRequestComponent { granted ->
+            PermissionRequestComponent(Manifest.permission.CAMERA) { granted ->
                 isPermissionGranted = granted
                 if (!granted) {
                     print("notGranted")
@@ -144,17 +143,15 @@ fun OverlayLoadingScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        content() // Display the content (your main UI)
+        content()
 
         if (isLoading.value) {
-            // Display an overlay with a semi-transparent background
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.5f)),
                 contentAlignment = Alignment.Center
             ) {
-                // You can add loading indicators or messages here
                 CircularProgressIndicator(color = Color.White)
             }
         }

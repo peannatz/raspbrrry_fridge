@@ -1,5 +1,6 @@
 package com.example.raspbrrry_fridge.android.network
 
+import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -13,6 +14,7 @@ abstract class NetworkClient {
     val usbConnectedDevice = "http://localhost:8080"
     val device = "http://192.168.2.171:8080"
     val backendUrl = usbConnectedDevice
+    protected val gson = Gson()
     val client = OkHttpClient()
 
     fun getRequest(url: String): String {

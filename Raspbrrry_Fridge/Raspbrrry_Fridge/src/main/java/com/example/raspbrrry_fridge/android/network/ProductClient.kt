@@ -1,9 +1,7 @@
 package com.example.raspbrrry_fridge.android.network
 
 import com.example.raspbrrry_fridge.android.data.Product
-import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import okhttp3.MediaType.Companion.toMediaType
 import java.lang.reflect.Type
 
 object ProductClient : NetworkClient() {
@@ -11,8 +9,6 @@ object ProductClient : NetworkClient() {
     val productEndpoint = "$backendUrl/products"
     private val productListType: Type = object : TypeToken<List<Product>>() {}.type
     private val productType: Type = object : TypeToken<Product>() {}.type
-    private val gson = Gson()
-    val mediaType = "application/json; charset=utf-8".toMediaType()
 
     fun getAllProducts(): List<Product> {
         val response = getRequest("$productEndpoint/findAll")
@@ -45,6 +41,4 @@ object ProductClient : NetworkClient() {
     fun deleteProduct(id: Int) {
         postRequest("$productEndpoint/delete/$id", "")
     }
-
-    val apiUrl = "http://world.openfoodfacts.org/api/v2/product/"
 }

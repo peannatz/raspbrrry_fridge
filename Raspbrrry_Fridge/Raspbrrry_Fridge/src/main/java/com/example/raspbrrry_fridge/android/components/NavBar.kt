@@ -16,7 +16,7 @@ var selectedItem by mutableIntStateOf(0)
 
 @Composable
 fun NavBar(navController: NavController) {
-    val items = listOf("Home", "Produce", "Recipes", "Stats")
+    val items = listOf("Home", "Produce", "Recipes", "Profile")
 
     NavigationBar(containerColor = MaterialTheme.colorScheme.onPrimary) {
         items.forEachIndexed { index, item ->
@@ -44,7 +44,7 @@ fun getDrawableResource(item: String): Int {
         "Home" -> R.drawable.home
         "Produce" -> R.drawable.nutrition
         "Recipes" -> R.drawable.recipes
-        "Stats" -> R.drawable.stats
+        "Profile" -> R.drawable.profile
         else -> androidx.core.R.drawable.notify_panel_notification_icon_bg // Use a default icon for other cases
     }
 }

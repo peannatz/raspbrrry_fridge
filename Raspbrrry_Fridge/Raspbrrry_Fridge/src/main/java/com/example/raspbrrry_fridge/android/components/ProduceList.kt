@@ -71,12 +71,12 @@ fun ProduceItems(pvm: ProductViewModel) {
                         Text(text = item.name, Modifier.align(Alignment.TopStart), style = typography.titleMedium)
                         Text(
                             text = "${item.weight}g",
-                            Modifier.align(Alignment.CenterStart),
+                            Modifier.align(Alignment.BottomStart),
                             style = typography.bodyMedium
                         )
                         Text(
-                            text = item.mhd,
-                            Modifier.align(Alignment.CenterEnd),
+                            text = item.formattedMhd,
+                            modifier=Modifier.align(Alignment.BottomEnd),
                             style = typography.bodyMedium
                         )
                         //   Text(text = item.ecoscore_grade, Modifier.align(Alignment.BottomStart), style = normalStyle)
