@@ -19,13 +19,17 @@ public final class ProductDto {
     private Long ean;
     private String tag;
 
-    public ProductDto(String name, int weight, String mhd, String url, Long ean, String tag) {
+    @NotBlank (message = "category tag should not be blank")
+    private String categories_tag;
+
+    public ProductDto(String name, int weight, String mhd, String url, @NotNull(message = "ean should not be null") Long ean, String tag, String categories_tag) {
         this.name = name;
         this.weight = weight;
         this.mhd = mhd;
         this.url = url;
         this.ean = ean;
         this.tag = tag;
+        this.categories_tag = categories_tag;
     }
 
     public String getName() {
@@ -74,5 +78,13 @@ public final class ProductDto {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getCategories_tag() {
+        return categories_tag;
+    }
+
+    public void setCategories_tag(String categories_tag) {
+        this.categories_tag = categories_tag;
     }
 }

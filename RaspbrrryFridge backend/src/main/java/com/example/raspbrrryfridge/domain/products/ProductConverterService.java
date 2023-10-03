@@ -15,6 +15,7 @@ public class ProductConverterService implements ConverterService<ProductDto, Pro
         product.setUrl(productDto.getUrl());
         product.setEan(productDto.getEan());
         product.setTag(productDto.getTag());
+        product.setCategories_tag(productDto.getCategories_tag());
         return product;
     }
 }
