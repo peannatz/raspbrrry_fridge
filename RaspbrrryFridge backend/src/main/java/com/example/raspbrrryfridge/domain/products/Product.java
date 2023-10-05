@@ -20,7 +20,6 @@ public class Product {
     private String url;
     private Long ean;
     private String tag;
-    private String categories_tag;
 
     public int getId() {
         return id;
@@ -78,11 +77,4 @@ public class Product {
         this.tag = tag;
     }
 
-    public String getCategories_tag() {
-        return categories_tag;
-    }
-
-    public void setCategories_tag(String categories_tag) {
-        this.categories_tag = categories_tag;
-    }
 }
