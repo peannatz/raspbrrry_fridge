@@ -11,7 +11,7 @@ public class RecipeConverterService implements ConverterService<RecipeDto, Recip
         recipe.setName(recipeDto.name());
         recipe.setDescription(recipeDto.description());
         recipe.setPortions(recipeDto.portions());
-        recipe.setProducts(recipeDto.products());
+        recipe.setIngredients(recipeDto.ingredients());
         recipe.setUrl(recipeDto.url());
         return recipe;
     }
