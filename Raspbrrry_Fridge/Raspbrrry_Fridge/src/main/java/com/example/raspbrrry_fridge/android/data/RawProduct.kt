@@ -11,9 +11,15 @@ data class RawProduct(
     val ecoscore_grade: String = "",
     val nova_group: String = "",
     val nutriscore_grade: String = "",
+    val categories_tags: List<String> = listOf(),
     val nutriments: Any = "",
     val _id: String = "",
-)
+){
+    val category: String
+        get() {
+            return categories_tags.last().split(":").last()
+        }
+}
 
 data class Product(
     val id: Int = -1,
@@ -22,7 +28,9 @@ data class Product(
     val mhd: String = "",
     val ean: String = "",
     val url: String = "",
-){
+    val categories_tag: String = "",
+    val tag: String = "",
+    ){
     val formattedMhd: String
         get() {
             val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")

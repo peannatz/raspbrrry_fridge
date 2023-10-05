@@ -43,7 +43,7 @@ fun ProduceInputPopup(
         val currentDate = LocalDate.now()
         val typography = MaterialTheme.typography
 
-        var weight by remember { mutableIntStateOf(100) }
+        var weight by remember { mutableStateOf("100") }
         var year by remember { mutableIntStateOf(currentDate.year) }
         var month by remember { mutableIntStateOf(currentDate.monthValue) }
         var day by remember { mutableIntStateOf(currentDate.dayOfMonth) }
@@ -54,21 +54,23 @@ fun ProduceInputPopup(
         fun addItemToFridge() {
             val productInput = Product(
                 name = product.product_name,
-                weight = weight,
+                weight = weight.toInt(),
                 mhd = LocalDate.of(year, month, day).toString(),
                 ean = product._id,
-                url = product.image_front_url
+                url = product.image_front_url,
+                categories_tag = product.category,
+                tag = product.category
             )
             barcodeScannerViewModel.addProduct(productInput)
             navController.navigateUp()
         }
 
         fun editItem() {
-            if (barcodeScannerViewModel.selectedProduct.value.weight == weight) {
+            if (barcodeScannerViewModel.selectedProduct.value.weight == weight.toInt()) {
                 barcodeScannerViewModel.removeProduct()
                 barcodeScannerViewModel.updateProduct(product._id)
-            } else if (barcodeScannerViewModel.selectedProduct.value.weight > weight) {
-                barcodeScannerViewModel.editProduct(weight)
+            } else if (barcodeScannerViewModel.selectedProduct.value.weight > weight.toInt()) {
+                barcodeScannerViewModel.editProduct(weight.toInt())
                 barcodeScannerViewModel.updateProduct(product._id)
                 return
             } else {
@@ -98,8 +100,10 @@ fun ProduceInputPopup(
                 Text(text = product.product_name_de, style = typography.titleMedium)
                 Spacer(Modifier.height(20.dp))
                 TextField(
-                    value = weight.toString(),
-                    onValueChange = { weight = it.toInt() },
+                    value = weight,
+                    onValueChange = {
+                        weight=it
+                    },
                     label = { Text("Weight in g") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true
@@ -185,7 +189,8 @@ fun ProduceInputPopup(
                                 verticalAlignment = Alignment.Top,
                                 modifier =
                                 if (!fillSwitch) {
-                                    Modifier.fillMaxWidth()
+                                    Modifier
+                                        .fillMaxWidth()
                                         .selectable(
                                             selected = item.id == barcodeScannerViewModel.selectedIndex.intValue,
                                             onClick = {

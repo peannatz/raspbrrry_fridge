@@ -30,7 +30,7 @@ object ProductClient : NetworkClient() {
 
     fun addProduct(product: Product) {
         val json = gson.toJson(product, productType)
-        postRequest("$productEndpoint/add", json)
+        postRequest("$productEndpoint", json)
     }
 
     fun editProduct(id: Int, product: Product) {

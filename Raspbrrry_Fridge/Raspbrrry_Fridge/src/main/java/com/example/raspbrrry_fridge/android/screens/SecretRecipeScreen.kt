@@ -32,9 +32,23 @@ fun SecretRecipeScreen(
     navController: NavController,
     rvm: RecipeViewModel = viewModel()
 ) {
-    var dropdownExpanded = remember { mutableStateOf(true) }
+    val dropdownExpanded = remember { mutableStateOf(true) }
+    val ingredientsList = remember { mutableStateListOf<Pair<String, String>>() }
+
     rvm.getAllRecipes()
     val recipes = rvm.recipes.collectAsState()
+
+    fun getAllIngredientsAsStrings(): List<String> {
+        return ingredientsList.map { "${it.first}:${it.second}" }
+    }
+
+    fun updateWeight(index: Int, newValue: String) {
+        ingredientsList[index] = Pair(ingredientsList[index].first, newValue)
+    }
+
+    fun updateName(index: Int, newValue: String) {
+        ingredientsList[index] = Pair(newValue, ingredientsList[index].second)
+    }
 
     Box(
         Modifier
@@ -58,15 +72,13 @@ fun SecretRecipeScreen(
                     },
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = if (recipes.value.isNotEmpty()) {
-                        Modifier
-                            .clickable(onClick = { dropdownExpanded.value = true })
-                            .border(width = 2.dp, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                            .width(300.dp)
-                            .height(50.dp)
-                    } else {
-                        Modifier
-                    }
+                    modifier =
+                    Modifier
+                        .clickable(onClick = { dropdownExpanded.value = true })
+                        .border(width = 2.dp, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        .width(300.dp)
+                        .height(50.dp)
+
                 )
                 DropdownMenu(
                     expanded = dropdownExpanded.value, onDismissRequest = { dropdownExpanded.value = false },
@@ -90,6 +102,7 @@ fun SecretRecipeScreen(
             if (rvm.isSelectedRecipeInitialised()) {
                 val recipeName = remember { mutableStateOf(rvm.selectedRecipe.name) }
                 val recipePortions = remember { mutableStateOf(rvm.selectedRecipe.portions.toString()) }
+                val recipeUrl = remember { mutableStateOf(rvm.selectedRecipe.url) }
                 val recipeDescription = remember { mutableStateOf(rvm.selectedRecipe.description) }
 
                 TextField(
@@ -117,6 +130,17 @@ fun SecretRecipeScreen(
                     label = { Text("Portions") })
                 TextField(
                     modifier = Modifier.width(300.dp),
+                    value = recipeUrl.value,
+                    onValueChange = {
+                        recipeUrl.value = it
+                        if (recipeUrl.value != "") {
+                            rvm.selectedRecipe.url = recipeUrl.value
+                        }
+                    },
+                    singleLine = true,
+                    label = { Text("Image Url") })
+                TextField(
+                    modifier = Modifier.width(300.dp),
                     value = recipeDescription.value,
                     onValueChange = {
                         recipeDescription.value = it
@@ -126,7 +150,26 @@ fun SecretRecipeScreen(
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                     label = { Text("Description") }
                 )
+                if (rvm.selectedRecipe.products.isNotEmpty()) {
+                    rvm.selectedRecipe.products.forEach { p ->
+                        val name = p.split(":")[1]
+                        val weight = p.split(":")[0]
+                        ingredientsList.add(Pair(name, weight))
+                    }
+                }
+                for ((index, ingredient) in ingredientsList.withIndex()) {
+                    IngredientInput(
+                        ingredient.second,
+                        ingredient.first,
+                        { newWeight -> updateWeight(index, newWeight) },
+                        { newName -> updateName(index, newName) })
+                }
+                CustomButton(text = "Add Ingredient", onClick = {
+                    ingredientsList.add(Pair("", ""))
+                }, modifier = Modifier)
                 CustomButton(text = "Save", onClick = {
+                    val recipeIngredients = getAllIngredientsAsStrings()
+                    rvm.selectedRecipe.products = recipeIngredients
                     rvm.addRecipe()
                     navController.navigateUp()
                 }, modifier = Modifier)
@@ -143,6 +186,43 @@ fun SecretRecipeScreen(
 
     }
 }
+
+
+@Composable
+private fun IngredientInput(
+    ingredientName: String, ingredientWeight: String, onProductWeightChange: (String) -> Unit,
+    onProductNameChange: (String) -> Unit,
+) {
+
+    var productName by remember { mutableStateOf(ingredientName) }
+    var productWeight by remember { mutableStateOf(ingredientWeight) }
+    Row(
+        Modifier.width(300.dp)
+    ) {
+        TextField(
+            modifier = Modifier.width(100.dp),
+            value = productWeight,
+            onValueChange = {
+                productWeight = it
+                onProductWeightChange(productWeight)
+            },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text("Weight") }
+        )
+        TextField(
+            modifier = Modifier.width(200.dp),
+            value = productName,
+            onValueChange = {
+                productName = it
+                onProductNameChange(productName)
+            },
+            singleLine = true,
+            label = { Text("Ingredient") }
+        )
+    }
+}
+
 
 @Preview(name = "SecretRecipeScreen")
 @Composable

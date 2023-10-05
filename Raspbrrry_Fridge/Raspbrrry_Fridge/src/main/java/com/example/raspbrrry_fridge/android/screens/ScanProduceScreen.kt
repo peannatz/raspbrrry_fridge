@@ -127,7 +127,8 @@ fun ScanProduceScreen(
                     R.drawable.light_on
                 }
             )
-            CustomButton(modifierClose, painterClose) { navController.navigateUp() }
+            CustomButton(modifierClose, painterClose) { navController.navigateUp()
+            barcodeView.pause()}
             CustomButton(modifierTorch, painterTorch, onClickTorch)
             ProduceInputPopup(navController = navController, visible = barcodeScannerViewModel.showInputPopup)
         }

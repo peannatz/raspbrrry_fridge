@@ -54,7 +54,8 @@ fun RecipeList(navController: NavController, rvm: RecipeViewModel = viewModel())
                 Row(
                     Modifier
                         .padding(4.dp, 2.dp)
-                        .background(MaterialTheme.colorScheme.primaryContainer),
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .clickable { navController.navigate("RecipeCardsScreen") },
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 //                    AsyncImage(

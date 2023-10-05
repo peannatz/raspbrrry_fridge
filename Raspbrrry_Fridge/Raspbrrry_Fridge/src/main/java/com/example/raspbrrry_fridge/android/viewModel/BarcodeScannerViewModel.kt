@@ -3,13 +3,13 @@ package com.example.raspbrrry_fridge.android.viewModel
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.example.raspbrrry_fridge.android.data.Product
 import com.example.raspbrrry_fridge.android.data.RawProduct
 import com.example.raspbrrry_fridge.android.data.ProductResponse
 import com.example.raspbrrry_fridge.android.network.BarcodeApiClient.getProductByEan
 import com.example.raspbrrry_fridge.android.network.ProductClient
 import com.google.gson.Gson
+import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +28,7 @@ class BarcodeScannerViewModel : ViewModel() {
     var showInputPopup = mutableStateOf(false)
 
     private suspend fun fetchProductData(result: String): RawProduct = withContext(Dispatchers.IO) {
-        val apiResponse = getProductByEan(result)
+        val apiResponse = JsonParser.parseString(getProductByEan(result)).asJsonObject
         val gson = Gson()
 
         return@withContext try {
@@ -93,7 +93,9 @@ class BarcodeScannerViewModel : ViewModel() {
             newWeight,
             selectedProduct.value.mhd,
             selectedProduct.value.ean,
-            selectedProduct.value.ean
+            selectedProduct.value.url,
+            selectedProduct.value.categories_tag,
+            selectedProduct.value.tag
         )
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

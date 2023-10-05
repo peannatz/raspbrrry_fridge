@@ -64,4 +64,5 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.chargemap.compose:numberpicker:1.0.3")
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("com.alexstyl.swipeablecard:swipeablecard:0.1.0")
 }
