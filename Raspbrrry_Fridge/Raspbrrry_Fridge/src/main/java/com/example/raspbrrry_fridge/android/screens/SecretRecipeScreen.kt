@@ -1,12 +1,10 @@
 package com.example.raspbrrry_fridge.android.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -27,22 +25,19 @@ import com.example.raspbrrry_fridge.android.components.CustomButton
 import com.example.raspbrrry_fridge.android.data.Recipe
 import com.example.raspbrrry_fridge.android.viewModel.RecipeViewModel
 
+
 @Composable
 fun SecretRecipeScreen(
     navController: NavController,
     rvm: RecipeViewModel = viewModel()
 ) {
     val dropdownExpanded = remember { mutableStateOf(true) }
-    val ingredientsList = remember { mutableStateListOf<Pair<String, String>>() }
+    val ingredientsList = remember { mutableStateListOf<Pair<String, Double>>() }
 
     rvm.getAllRecipes()
     val recipes = rvm.recipes.collectAsState()
 
-    fun getAllIngredientsAsStrings(): List<String> {
-        return ingredientsList.map { "${it.first}:${it.second}" }
-    }
-
-    fun updateWeight(index: Int, newValue: String) {
+    fun updateWeight(index: Int, newValue: Double) {
         ingredientsList[index] = Pair(ingredientsList[index].first, newValue)
     }
 
@@ -58,10 +53,10 @@ fun SecretRecipeScreen(
         Column(
             Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .width(300.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-
             ) {
             Box(Modifier.width(300.dp)) {
                 Text(
@@ -150,26 +145,27 @@ fun SecretRecipeScreen(
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
                     label = { Text("Description") }
                 )
-                if (rvm.selectedRecipe.products.isNotEmpty()) {
-                    rvm.selectedRecipe.products.forEach { p ->
-                        val name = p.split(":")[1]
-                        val weight = p.split(":")[0]
-                        ingredientsList.add(Pair(name, weight))
+                DisposableEffect(rvm.selectedRecipe) {
+                    if (rvm.selectedRecipe.ingredients.isNotEmpty()) {
+                        ingredientsList.clear()
+                        rvm.selectedRecipe.ingredients.forEach { p ->
+                            ingredientsList.add(Pair(p.key, p.value))
+                        }
                     }
+                    onDispose { }
                 }
                 for ((index, ingredient) in ingredientsList.withIndex()) {
                     IngredientInput(
-                        ingredient.second,
                         ingredient.first,
+                        ingredient.second,
                         { newWeight -> updateWeight(index, newWeight) },
                         { newName -> updateName(index, newName) })
                 }
                 CustomButton(text = "Add Ingredient", onClick = {
-                    ingredientsList.add(Pair("", ""))
+                    ingredientsList.add(Pair("", 0.toDouble()))
                 }, modifier = Modifier)
                 CustomButton(text = "Save", onClick = {
-                    val recipeIngredients = getAllIngredientsAsStrings()
-                    rvm.selectedRecipe.products = recipeIngredients
+                    rvm.selectedRecipe.ingredients = ingredientsList.toMap()
                     rvm.addRecipe()
                     navController.navigateUp()
                 }, modifier = Modifier)
@@ -190,12 +186,12 @@ fun SecretRecipeScreen(
 
 @Composable
 private fun IngredientInput(
-    ingredientName: String, ingredientWeight: String, onProductWeightChange: (String) -> Unit,
+    ingredientName: String, ingredientWeight: Double, onProductWeightChange: (Double) -> Unit,
     onProductNameChange: (String) -> Unit,
 ) {
 
     var productName by remember { mutableStateOf(ingredientName) }
-    var productWeight by remember { mutableStateOf(ingredientWeight) }
+    var productWeight by remember { mutableStateOf(ingredientWeight.toString()) }
     Row(
         Modifier.width(300.dp)
     ) {
@@ -203,8 +199,10 @@ private fun IngredientInput(
             modifier = Modifier.width(100.dp),
             value = productWeight,
             onValueChange = {
-                productWeight = it
-                onProductWeightChange(productWeight)
+                if(it.isNotEmpty()){
+                    productWeight = it
+                    onProductWeightChange(productWeight.toDouble())
+                }
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

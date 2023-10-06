@@ -22,7 +22,7 @@ object RecipeClient : NetworkClient() {
 
     fun addRecipe(recipe: Recipe) {
         val json = gson.toJson(recipe, recipeType)
-        postRequest("${recipeEndpoint}/add", json)
+        postRequest("${recipeEndpoint}", json)
     }
 
     fun editRecipe(recipe: Recipe) {

@@ -92,7 +92,6 @@ fun MyCoolTheme(
 
     val typography = Typography(
         titleLarge = TextStyle(
-            fontSize = 35.sp,
             fontWeight = FontWeight.ExtraBold,
             letterSpacing = 0.2.em,
             color = colors.primary,

@@ -9,7 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -30,7 +30,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-        var wsc=WebSocketClient()
+
+        val wsc=WebSocketClient()
         wsc.sendMessage("productInput")
 
         val notificationChannel = NotificationChannel(
@@ -40,8 +41,6 @@ class MainActivity : ComponentActivity() {
         )
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)
-
-        println("created")
 
         setContent {
             MyCoolTheme(useDarkTheme = isSystemInDarkTheme()) {

@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.MaterialTheme
@@ -53,7 +53,7 @@ fun ProduceScreen(
                 )
                 Text(pvm.selectedProduct.name, Modifier.align(Alignment.TopCenter))
                 Text(pvm.selectedProduct.weight.toString(), Modifier.align(Alignment.CenterStart))
-                Text(pvm.selectedProduct.mhd.toString(), Modifier.align(Alignment.CenterEnd))
+                Text(pvm.selectedProduct.mhd, Modifier.align(Alignment.CenterEnd))
             }
         }
     }

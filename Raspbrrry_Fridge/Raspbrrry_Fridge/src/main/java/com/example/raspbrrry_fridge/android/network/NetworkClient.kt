@@ -25,7 +25,7 @@ abstract class NetworkClient {
         return try {
             val response: Response = client.newCall(request).execute()
             if (response.isSuccessful || response.code == 404) {
-                response.body!!.string() ?: ""
+                response.body!!.string()
             } else {
                 // Handle error, e.g., response.code(), response.message()
                 throw IOException("HTTP Error: ${response.code}")
@@ -53,6 +53,7 @@ abstract class NetworkClient {
                 return response.body!!.string()
             }
         } catch (e: IOException) {
+            println(e.message)
             e.printStackTrace()
         }
         return null

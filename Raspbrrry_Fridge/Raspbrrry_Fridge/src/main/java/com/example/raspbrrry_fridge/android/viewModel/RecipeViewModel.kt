@@ -16,6 +16,7 @@ class RecipeViewModel : ViewModel() {
 
     val recipeList = MutableStateFlow(listOf<Recipe>())
     val recipes: StateFlow<List<Recipe>> get() = recipeList
+    var isLoadingRecipes by mutableStateOf(false)
 
     var selectedRecipeId by mutableIntStateOf(-1)
     lateinit var selectedRecipe: Recipe
@@ -24,16 +25,30 @@ class RecipeViewModel : ViewModel() {
 
     private var pressCount by mutableIntStateOf(0)
 
+    fun updateRecipeOrder(newRecipesOrder: List<Recipe>) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                recipeList.emit(newRecipesOrder)
+            }
+        }
+    }
+
     fun selectRecipe(recipe: Recipe) {
         selectedRecipe = recipe
         selectedRecipeId = recipe.id
     }
 
     fun getAllRecipes() {
+        isLoadingRecipes = true
+
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val fetchedRecipes = RecipeClient.getAllRecipes()
-                recipeList.emit(fetchedRecipes)
+            try {
+                withContext(Dispatchers.IO) {
+                    val fetchedRecipes = RecipeClient.getAllRecipes()
+                    recipeList.emit(fetchedRecipes)
+                }
+            } finally {
+                isLoadingRecipes = false
             }
         }
     }

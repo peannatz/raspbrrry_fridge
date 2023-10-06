@@ -6,5 +6,5 @@ data class Recipe(
     var description: String = "",
     var portions: Int = 0,
     var url: String = "",
-    var products: List<String> = listOf(),
+    var ingredients: Map<String, Double> = HashMap(),
 )

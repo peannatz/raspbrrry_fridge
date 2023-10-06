@@ -5,7 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.raspbrrry_fridge.android.viewModel.ProductViewModel
@@ -13,17 +13,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.raspbrrry_fridge.android.data.Recipe
 import com.example.raspbrrry_fridge.android.viewModel.RecipeViewModel
 
 @Composable
-fun RecipeList(navController: NavController, rvm: RecipeViewModel = viewModel()) {
+fun RecipeList(navController: NavController) {
+    val rvm = viewModel<RecipeViewModel>()
 
     rvm.getAllRecipes()
-    val products: List<Recipe> by rvm.recipes.collectAsState()
+    val recipes: List<Recipe> by rvm.recipes.collectAsState()
     val typography = MaterialTheme.typography
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -42,7 +46,7 @@ fun RecipeList(navController: NavController, rvm: RecipeViewModel = viewModel())
                     }
             ) {
                 Text(text = "Recipe", Modifier.align(Alignment.TopStart), style = typography.titleMedium)
-                Text(text = "Portions", Modifier.align(Alignment.CenterEnd), style = typography.labelMedium)
+                Text(text = "Portions", Modifier.align(Alignment.BottomEnd), style = typography.labelMedium)
             }
         }
         LazyColumn(
@@ -50,22 +54,25 @@ fun RecipeList(navController: NavController, rvm: RecipeViewModel = viewModel())
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.inversePrimary)
         ) {
-            items(products) { item ->
+            items(recipes) { item ->
                 Row(
                     Modifier
                         .padding(4.dp, 2.dp)
                         .background(MaterialTheme.colorScheme.primaryContainer)
-                        .clickable { navController.navigate("RecipeCardsScreen") },
+                        .clickable {
+                            rvm.selectedRecipeId = item.id
+                            navController.navigate("RecipeCardsScreen")
+                        },
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-//                    AsyncImage(
-//                        model = ImageRequest.Builder(LocalContext.current)
-//                            .data(item.url)
-//                            .build(), contentDescription = "${item.name} Image",
-//                        Modifier
-//                            .height(100.dp)
-//                            .width(100.dp)
-//                    )
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(item.url)
+                            .build(), contentDescription = "${item.name} Image",
+                        Modifier
+                            .height(100.dp)
+                            .width(100.dp)
+                    )
 
                     Box(
                         Modifier
