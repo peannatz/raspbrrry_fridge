@@ -2,6 +2,7 @@ package com.example.raspbrrry_fridge.android.components
 
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.*
@@ -15,16 +16,22 @@ var selectedItem by mutableIntStateOf(0)
 
 @Composable
 fun NavBar(navController: NavController) {
-    val items = listOf("Home", "Produce", "Recipes", "Stats")
+    val items = listOf("Home", "Produce", "Recipes", "Profile")
 
-    NavigationBar {
+    NavigationBar(containerColor = MaterialTheme.colorScheme.onPrimary) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
-                icon = { Icon(painter= painterResource(id = getDrawableResource(item)), contentDescription = item) },
-                label = { Text(item) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = getDrawableResource(item)),
+                        contentDescription = item,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                label = { Text(item, color = MaterialTheme.colorScheme.primary) },
                 selected = selectedItem == index,
                 onClick = {
-                    selectedItem = index;
+                    selectedItem = index
                     navController.navigate("${item}Screen")
                 }
             )
@@ -37,7 +44,7 @@ fun getDrawableResource(item: String): Int {
         "Home" -> R.drawable.home
         "Produce" -> R.drawable.nutrition
         "Recipes" -> R.drawable.recipes
-        "Stats" -> R.drawable.stats
+        "Profile" -> R.drawable.profile
         else -> androidx.core.R.drawable.notify_panel_notification_icon_bg // Use a default icon for other cases
     }
 }

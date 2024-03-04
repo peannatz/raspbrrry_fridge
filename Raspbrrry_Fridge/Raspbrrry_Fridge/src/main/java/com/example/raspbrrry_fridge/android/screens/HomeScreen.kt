@@ -18,6 +18,7 @@ fun HomeScreen(
 ) {
     GeneralScaffold(navController)
     { Column(Modifier.fillMaxSize()){
+       // Image(painter = , contentDescription = )
             Text(text = "Welcome", modifier = Modifier.align(Alignment.CenterHorizontally))
             Text(
                 text = "You're all good, nothing wasted today.",

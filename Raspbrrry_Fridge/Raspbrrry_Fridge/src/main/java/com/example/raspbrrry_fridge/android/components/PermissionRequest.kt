@@ -1,6 +1,5 @@
 package com.example.raspbrrry_fridge.android.components
 
-import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -9,6 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun PermissionRequestComponent(
+    permission: String,
     onPermissionResult: (Boolean) -> Unit
 ) {
     val launcher = rememberLauncherForActivityResult(
@@ -18,8 +18,7 @@ fun PermissionRequestComponent(
     }
 
     DisposableEffect(Unit) {
-        launcher.launch(Manifest.permission.CAMERA)
-        // Add more permissions as needed
+        launcher.launch(permission)
         onDispose { }
     }
 }

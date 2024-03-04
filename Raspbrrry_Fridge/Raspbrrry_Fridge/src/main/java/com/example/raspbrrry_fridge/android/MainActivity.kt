@@ -1,47 +1,80 @@
 package com.example.raspbrrry_fridge.android
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.raspbrrry_fridge.android.screens.HomeScreen
-import com.example.raspbrrry_fridge.android.screens.ProduceScreen
-import com.example.raspbrrry_fridge.android.screens.RecipesScreen
-import com.example.raspbrrry_fridge.android.screens.StatsScreen
-import com.example.raspbrrry_fridge.android.screens.ScanProduceScreen
+import com.example.raspbrrry_fridge.android.network.WebSocketClient
+import com.example.raspbrrry_fridge.android.screens.*
+import com.example.raspbrrry_fridge.android.ui.theme.MyCoolTheme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
+        val wsc=WebSocketClient()
+        wsc.sendMessage("productInput")
+
+        val notificationChannel = NotificationChannel(
+            "fridge_notification",
+            "Fridge",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(notificationChannel)
+
         setContent {
-            MyApplicationTheme {
+            MyCoolTheme(useDarkTheme = isSystemInDarkTheme()) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 ) {
                     Navigation()
                 }
             }
         }
     }
-}
 
-@Composable
-fun Navigation() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "HomeScreen") {
-        composable("HomeScreen"){ HomeScreen(navController) }
-        composable("ProduceScreen"){ ProduceScreen(navController)}
-        composable("RecipesScreen"){ RecipesScreen(navController)}
-        composable("StatsScreen"){ StatsScreen(navController)}
-        composable("ScanProduceScreen"){ ScanProduceScreen(navController)}
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        if (intent?.action == "open_recipes") {
+            navController.navigate("RecipeCardsScreen") // Replace with your Composable destination ID
+        }
+    }
+
+    @Composable
+    fun Navigation() {
+        navController = rememberNavController()
+
+        NavHost(navController = navController, startDestination = "HomeScreen") {
+            composable("HomeScreen") { HomeScreen(navController) }
+            composable("ProduceScreen") { ProduceScreen(navController) }
+            composable("RecipesScreen") { RecipesScreen(navController) }
+            composable("ProfileScreen") { ProfileScreen(navController) }
+            composable("ScanProduceScreen") { ScanProduceScreen(navController) }
+            composable("SecretRecipeScreen") { SecretRecipeScreen(navController) }
+            composable("RecipeCardsScreen") { RecipeCardsScreen(navController) }
+        }
     }
 }
 
@@ -54,7 +87,7 @@ fun GreetingView(text: String) {
 @Preview
 @Composable
 fun DefaultPreview() {
-    MyApplicationTheme {
+    MyCoolTheme(useDarkTheme = isSystemInDarkTheme()) {
         GreetingView("Hello, Android!")
     }
 }
