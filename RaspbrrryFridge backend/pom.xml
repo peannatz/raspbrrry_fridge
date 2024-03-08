@@ -64,10 +64,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>io.sentry</groupId>
                 <artifactId>sentry-maven-plugin</artifactId>
                 <version>0.0.7</version>
@@ -84,7 +80,7 @@
                     <!--<url>http://localhost:8000/</url>-->
 
                     <!-- provide your auth token via SENTRY_AUTH_TOKEN environment variable -->
-                    <authToken>${env.SENTRY_AUTH_TOKEN}</authToken>
+                    <authToken>${.env.SENTRY_AUTH_TOKEN}</authToken>
                 </configuration>
                 <executions>
                     <execution>
@@ -98,6 +94,10 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

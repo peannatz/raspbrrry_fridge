@@ -9,4 +9,38 @@ services:
       POSTGRES_PASSWORD: pwd
       POSTGRES_DB: fridge
     ports:
-      - 5432:5432
+      - '5432:5432'
+
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:9.5.2
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+
+  raspbrrryfridge:
+    container_name: raspbrrryfridge
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fridge
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - sentry.dsn=https://703f874dd5307cf61321e38e41da40b8@o4506851922083840.ingest.sentry.io/4506858324033536
+      - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+    depends_on:
+      - db
