@@ -40,7 +40,5 @@ services:
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=pwd
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - sentry.dsn=https://703f874dd5307cf61321e38e41da40b8@o4506851922083840.ingest.sentry.io/4506858324033536
-      - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
     depends_on:
       - db

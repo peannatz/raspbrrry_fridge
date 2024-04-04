@@ -23,7 +23,6 @@ class ProductServiceTest {
 
     }
 
-    //TODO
     @Test
     void addProduct() {
         ProductDto productToAdd = new ProductDto("Test Product", 100, "2023-09-30", "Edgar", 12345L, "Pog");
