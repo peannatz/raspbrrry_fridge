@@ -3,11 +3,11 @@
    on:
      push:
        branches: [ main ]
-   
+
    jobs:
      build-and-test:
        runs-on: ubuntu-latest
-   
+
        steps:
        - uses: actions/checkout@v2
        - name: Set up JDK 11
@@ -17,10 +17,13 @@
            java-version: '11'
 
        - name: Build with Maven
+         working-directory: ./RaspbrrryFridge backend
          run: ./mvnw package -DskipTests
-   
+
        - name: Build Docker Image
+         working-directory: ./RaspbrrryFridge backend
          run: docker build -t springboot-app:latest .
-         
+
        - name: Run Tests
+         working-directory: ./RaspbrrryFridge backend
          run: ./mvnw test
