@@ -45,3 +45,20 @@ jobs:
         working-directory: ./RaspbrrryFridge backend
         run: |
           docker-compose down
+
+  build-and-test-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Run Frontend Tests
+        working-directory: ./Raspbrrry_Fridge
+        run: ./gradlew test
+          
