@@ -17,6 +17,7 @@ class ProductViewModel : ViewModel() {
 
     val productsList = MutableStateFlow(listOf<Product>())
     val products: StateFlow<List<Product>> get() = productsList
+    var productClient = ProductClient()
 
     val workManager = WorkManager.getInstance()
 
@@ -32,7 +33,7 @@ class ProductViewModel : ViewModel() {
         // Use the repository to fetch products from the backend
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val fetchedProducts = ProductClient.getAllProducts()
+                val fetchedProducts = productClient.getAllProducts()
                 productsList.emit(fetchedProducts)
 
             }

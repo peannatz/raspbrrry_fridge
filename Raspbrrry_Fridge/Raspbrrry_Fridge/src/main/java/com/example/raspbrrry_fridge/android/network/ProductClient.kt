@@ -4,7 +4,7 @@ import com.example.raspbrrry_fridge.android.data.Product
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
-object ProductClient : NetworkClient() {
+class ProductClient : NetworkClient() {
 
     val productEndpoint = "$backendUrl/products"
     private val productListType: Type = object : TypeToken<List<Product>>() {}.type

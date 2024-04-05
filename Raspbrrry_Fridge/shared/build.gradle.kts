@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -5,9 +7,9 @@ plugins {
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
+    kotlin.applyDefaultHierarchyTemplate()
 
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
