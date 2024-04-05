@@ -9,5 +9,4 @@ public class RaspbrrryFridgeApplication {
     public static void main(String[] args) {
         SpringApplication.run(RaspbrrryFridgeApplication.class, args);
     }
-
 }
